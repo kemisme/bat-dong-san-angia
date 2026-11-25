@@ -746,9 +746,22 @@ textarea {
   padding: 0.95rem 1.25rem 1.2rem;
   border-block-start: 1px solid var(--border);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.compare-toggle-btn[aria-pressed="true"] {
+  background-color: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
 }
 
 .card-price strong {
@@ -837,6 +850,72 @@ textarea {
   font-size: 0.82rem;
   font-weight: 600;
   color: #f3d7ad;
+}
+
+/* Calculator Tabs & Financial Studio */
+.calc-tabs {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.calc-tablist {
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  scroll-snap-type: inline proximity;
+  border-block-end: 1px solid var(--border);
+  scrollbar-width: none;
+}
+
+.calc-tablist::-webkit-scrollbar {
+  display: none;
+}
+
+.calc-tab {
+  position: relative;
+  flex: none;
+  scroll-snap-align: start;
+  min-block-size: 44px;
+  padding: 0.75rem 1.2rem;
+  border: 0;
+  background: transparent;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.calc-tab:hover {
+  color: var(--primary);
+}
+
+.calc-tab[aria-selected="true"] {
+  color: var(--primary);
+}
+
+.calc-tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  border-block-end: 3px solid var(--primary);
+}
+
+@media (forced-colors: active) {
+  .calc-tab[aria-selected="true"]::after {
+    border-block-end-color: Highlight;
+  }
+}
+
+.calc-panels {
+  display: grid;
+}
+
+.calc-panels > [role="tabpanel"] {
+  grid-area: 1 / 1;
+}
+
+.calc-panel-inner {
+  min-inline-size: 0;
 }
 
 /* Mortgage Calculator */
@@ -1343,4 +1422,363 @@ dialog.property-dialog::backdrop {
   border-block-start: 1px solid rgb(255 255 255 / 0.14);
   font-size: 0.85rem;
   color: rgb(255 255 255 / 0.72);
+}
+
+/* Amenities Grid & Modal Share Row */
+.amenities-section h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+  color: var(--primary);
+}
+
+.amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: 0.65rem;
+}
+
+.amenity-chip {
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  display: grid;
+  gap: 0.15rem;
+}
+
+.amenity-chip strong {
+  font-size: 0.88rem;
+  color: var(--ink);
+}
+
+.amenity-chip span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-strong);
+}
+
+.share-inline-status {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--success);
+  min-block-size: 1.3em;
+}
+
+/* Floating Compare Tray */
+.compare-tray {
+  position: fixed;
+  inset-block-end: 1rem;
+  inset-inline: 1rem;
+  margin-inline: auto;
+  max-inline-size: 980px;
+  z-index: 35;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem 1.25rem;
+  padding: 0.9rem 1.15rem;
+  border-radius: var(--radius-md);
+  background-color: var(--primary);
+  color: #fff;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgb(255 255 255 / 0.18);
+}
+
+.compare-tray[hidden] {
+  display: none;
+}
+
+.compare-tray-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 1rem;
+}
+
+.compare-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.compare-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background-color: rgb(255 255 255 / 0.14);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.compare-chip-remove {
+  display: grid;
+  place-items: center;
+  min-inline-size: 24px;
+  min-block-size: 24px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.compare-chip-remove:hover {
+  background-color: rgb(255 255 255 / 0.2);
+}
+
+.compare-tray-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.compare-clear-btn {
+  color: #fff;
+  border-color: rgb(255 255 255 / 0.38);
+}
+
+.compare-clear-btn:hover {
+  background-color: rgb(255 255 255 / 0.14);
+  border-color: #fff;
+}
+
+/* Responsive Comparison Table Dialog */
+dialog.compare-dialog {
+  inline-size: min(94dvw, 1080px);
+}
+
+.compare-dialog-body {
+  padding: clamp(1.25rem, 3vw, 1.85rem);
+  display: grid;
+  gap: 1.15rem;
+}
+
+.compare-dialog-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.compare-dialog-header h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.8vw, 1.8rem);
+  color: var(--primary);
+}
+
+.compare-dialog-close {
+  position: static;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+
+.table-wrapper {
+  overflow: auto;
+  max-inline-size: 100%;
+  max-block-size: min(62dvh, 560px);
+  container-type: inline-size;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.compare-table {
+  inline-size: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.92rem;
+  text-align: start;
+}
+
+.compare-table caption {
+  padding: 0.75rem 1rem;
+  text-align: start;
+  font-size: 0.85rem;
+  color: var(--muted);
+  background-color: var(--bg);
+  border-block-end: 1px solid var(--border);
+}
+
+.compare-table thead {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 2;
+  background-color: var(--surface);
+}
+
+.compare-table th,
+.compare-table td {
+  padding: 0.85rem 1rem;
+  border-block-end: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.compare-table thead th {
+  background-color: var(--surface-alt);
+  color: var(--primary);
+  font-weight: 700;
+  border-block-end: 2px solid var(--border);
+}
+
+.compare-table tbody th {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 1;
+  background-color: var(--surface);
+  color: var(--muted);
+  font-weight: 600;
+  white-space: nowrap;
+  border-inline-end: 1px solid var(--border);
+}
+
+.best-tag {
+  display: inline-block;
+  margin-inline-start: 0.35rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background-color: var(--primary);
+  color: #fff;
+}
+
+@container (width < 600px) {
+  .compare-table,
+  .compare-table thead,
+  .compare-table tbody,
+  .compare-table tr,
+  .compare-table th,
+  .compare-table td {
+    display: block;
+  }
+
+  .compare-table thead {
+    display: none;
+  }
+
+  .compare-table tr {
+    margin-block-end: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background-color: var(--surface);
+  }
+
+  .compare-table tbody th {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+    background-color: var(--surface-alt);
+    color: var(--primary);
+    border-inline-end: 0;
+  }
+
+  .compare-table td:nth-child(2)::before {
+    content: var(--label-2) ": ";
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .compare-table td:nth-child(3)::before {
+    content: var(--label-3) ": ";
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .compare-table td:nth-child(4)::before {
+    content: var(--label-4) ": ";
+    font-weight: 700;
+    color: var(--primary);
+  }
+}
+
+/* Toast Notifications (popover="manual") */
+.toast-region {
+  position: fixed;
+  inset-block-start: 5rem;
+  inset-inline-end: 1rem;
+  z-index: 45;
+  display: grid;
+  gap: 0.6rem;
+  pointer-events: none;
+}
+
+@supports not selector(:popover-open) {
+  .toast-item[popover]:not(.\:popover-open) {
+    display: none;
+  }
+}
+
+.toast-item[popover] {
+  position: fixed;
+  inset: auto;
+  inset-block-start: 5rem;
+  inset-inline-end: 1rem;
+  margin: 0;
+  inline-size: min(24rem, calc(100dvw - 2rem));
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  background-color: var(--primary);
+  color: #fff;
+  box-shadow: var(--shadow-lg);
+  pointer-events: auto;
+  opacity: 0;
+  translate: 0 -0.5rem;
+  transition: opacity 200ms ease, translate 200ms ease, display 200ms ease, overlay 200ms ease;
+  transition-behavior: allow-discrete;
+}
+
+.toast-item[popover]:is(:popover-open, .\:popover-open) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  opacity: 1;
+  translate: 0 0;
+}
+
+@starting-style {
+  .toast-item[popover]:is(:popover-open, .\:popover-open) {
+    opacity: 0;
+    translate: 0 -0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast-item[popover] {
+    transition: none;
+    translate: 0 0;
+  }
+}
+
+.toast-message {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.toast-close {
+  flex-shrink: 0;
+  min-inline-size: 32px;
+  min-block-size: 32px;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.35);
+  background: transparent;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.toast-close:hover {
+  background-color: rgb(255 255 255 / 0.16);
 }

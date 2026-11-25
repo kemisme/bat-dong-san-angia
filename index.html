@@ -275,74 +275,172 @@
       </section>
 
       <section class="section calculator-section" id="calculator" aria-labelledby="calculator-heading">
-        <div class="container calculator-layout">
-          <div class="calculator-intro">
-            <p class="section-kicker">Hoạch định tài chính thông minh</p>
-            <h2 id="calculator-heading">Ước Tính Khoản Vay Mua Nhà</h2>
-            <p>
-              Tính nhanh số tiền thanh toán hàng tháng theo phương pháp dư nợ giảm dần hoặc trả đều để chủ động dòng tiền đầu tư.
-            </p>
-
-            <div class="calc-sliders">
-              <div class="range-group">
-                <div class="range-header">
-                  <label for="calc-price">Giá trị bất động sản</label>
-                  <output id="calc-price-out" for="calc-price">25,0 Tỷ VNĐ</output>
-                </div>
-                <input type="range" id="calc-price" min="3" max="100" step="0.5" value="25" />
-              </div>
-
-              <div class="range-group">
-                <div class="range-header">
-                  <label for="calc-down">Vốn tự có trả trước</label>
-                  <output id="calc-down-out" for="calc-down">30% (7,5 Tỷ)</output>
-                </div>
-                <input type="range" id="calc-down" min="15" max="80" step="5" value="30" />
-              </div>
-
-              <div class="range-group">
-                <div class="range-header">
-                  <label for="calc-rate">Lãi suất ngân hàng dự kiến</label>
-                  <output id="calc-rate-out" for="calc-rate">7,5%/năm</output>
-                </div>
-                <input type="range" id="calc-rate" min="4.5" max="13" step="0.25" value="7.5" />
-              </div>
-
-              <div class="range-group">
-                <div class="range-header">
-                  <label for="calc-years">Thời hạn vay</label>
-                  <output id="calc-years-out" for="calc-years">20 năm</output>
-                </div>
-                <input type="range" id="calc-years" min="5" max="35" step="1" value="20" />
-              </div>
-            </div>
-          </div>
-
-          <div class="calculator-card" aria-live="polite">
-            <p class="calc-card-label">Số tiền dự kiến trả hàng tháng</p>
-            <p class="calc-monthly" id="calc-monthly">141,0 Triệu/tháng</p>
-
-            <div class="calc-bar" aria-hidden="true">
-              <span class="calc-bar-principal" id="calc-bar-principal"></span>
-              <span class="calc-bar-interest" id="calc-bar-interest"></span>
+        <div class="container">
+          <div class="calc-tabs">
+            <div class="calc-tablist" focusgroup="tablist nomemory" aria-label="Chế độ tính toán tài chính">
+              <button type="button" class="calc-tab" id="tab-mortgage" aria-selected="true" focusgroupstart>
+                Mua ở · Trả góp
+              </button>
+              <button type="button" class="calc-tab" id="tab-roi" aria-selected="false">
+                Đầu tư · Cho thuê &amp; ROI
+              </button>
             </div>
 
-            <dl class="calc-breakdown">
-              <div>
-                <dt>Số tiền cần vay (70%)</dt>
-                <dd id="calc-loan-amount">17,50 Tỷ VNĐ</dd>
-              </div>
-              <div>
-                <dt>Tổng lãi dự kiến</dt>
-                <dd id="calc-total-interest">16,34 Tỷ VNĐ</dd>
-              </div>
-              <div>
-                <dt>Tổng gốc + lãi cuối kỳ</dt>
-                <dd id="calc-total-payment">33,84 Tỷ VNĐ</dd>
-              </div>
-            </dl>
+            <div class="calc-panels">
+              <div role="tabpanel" id="panel-mortgage" aria-labelledby="tab-mortgage" tabindex="0">
+                <div class="calc-panel-inner calculator-layout">
+                  <div class="calculator-intro">
+                    <p class="section-kicker">Hoạch định tài chính thông minh</p>
+                    <h2 id="calculator-heading">Ước Tính Khoản Vay Mua Nhà</h2>
+                    <p>
+                      Tính nhanh số tiền thanh toán hàng tháng theo phương pháp dư nợ giảm dần hoặc trả đều để chủ động dòng tiền đầu tư.
+                    </p>
 
-            <a href="#consultation" class="btn btn-primary btn-full">Nhận bảng tính chi tiết từ chuyên viên</a>
+                    <div class="calc-sliders">
+                      <div class="range-group">
+                        <div class="range-header">
+                          <label for="calc-price">Giá trị bất động sản</label>
+                          <output id="calc-price-out" for="calc-price">25,0 Tỷ VNĐ</output>
+                        </div>
+                        <input type="range" id="calc-price" min="3" max="100" step="0.5" value="25" />
+                      </div>
+
+                      <div class="range-group">
+                        <div class="range-header">
+                          <label for="calc-down">Vốn tự có trả trước</label>
+                          <output id="calc-down-out" for="calc-down">30% (7,5 Tỷ)</output>
+                        </div>
+                        <input type="range" id="calc-down" min="15" max="80" step="5" value="30" />
+                      </div>
+
+                      <div class="range-group">
+                        <div class="range-header">
+                          <label for="calc-rate">Lãi suất ngân hàng dự kiến</label>
+                          <output id="calc-rate-out" for="calc-rate">7,5%/năm</output>
+                        </div>
+                        <input type="range" id="calc-rate" min="4.5" max="13" step="0.25" value="7.5" />
+                      </div>
+
+                      <div class="range-group">
+                        <div class="range-header">
+                          <label for="calc-years">Thời hạn vay</label>
+                          <output id="calc-years-out" for="calc-years">20 năm</output>
+                        </div>
+                        <input type="range" id="calc-years" min="5" max="35" step="1" value="20" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="calculator-card" aria-live="polite">
+                    <p class="calc-card-label">Số tiền dự kiến trả hàng tháng</p>
+                    <p class="calc-monthly" id="calc-monthly">141,0 Triệu/tháng</p>
+
+                    <div class="calc-bar" aria-hidden="true">
+                      <span class="calc-bar-principal" id="calc-bar-principal"></span>
+                      <span class="calc-bar-interest" id="calc-bar-interest"></span>
+                    </div>
+
+                    <dl class="calc-breakdown">
+                      <div>
+                        <dt>Số tiền cần vay (70%)</dt>
+                        <dd id="calc-loan-amount">17,50 Tỷ VNĐ</dd>
+                      </div>
+                      <div>
+                        <dt>Tổng lãi dự kiến</dt>
+                        <dd id="calc-total-interest">16,34 Tỷ VNĐ</dd>
+                      </div>
+                      <div>
+                        <dt>Tổng gốc + lãi cuối kỳ</dt>
+                        <dd id="calc-total-payment">33,84 Tỷ VNĐ</dd>
+                      </div>
+                    </dl>
+
+                    <a href="#consultation" class="btn btn-primary btn-full">Nhận bảng tính chi tiết từ chuyên viên</a>
+                  </div>
+                </div>
+              </div>
+
+              <div role="tabpanel" id="panel-roi" aria-labelledby="tab-roi" hidden="until-found">
+                <div class="calc-panel-inner calculator-layout">
+                  <div class="calculator-intro">
+                    <p class="section-kicker">Phân tích hiệu suất đầu tư</p>
+                    <h2>Dự Phóng Dòng Tiền Cho Thuê &amp; Lãi Vốn</h2>
+                    <p>
+                      Ước tính tỷ suất sinh lời ròng (Net Rental Yield) và tổng lợi nhuận gộp trong 5 năm khi kết hợp cho thuê dài hạn và tăng giá bất động sản.
+                    </p>
+
+                    <div class="calc-sliders">
+                      <div class="range-group">
+                        <div class="range-header">
+                          <label for="roi-price">Giá trị đầu tư ban đầu</label>
+                          <output id="roi-price-out" for="roi-price">30,0 Tỷ VNĐ</output>
+                        </div>
+                        <input type="range" id="roi-price" min="5" max="100" step="0.5" value="30" />
+                      </div>
+
+                      <div class="range-group">
+                        <div class="range-header">
+                          <label for="roi-rent">Giá cho thuê dự kiến</label>
+                          <output id="roi-rent-out" for="roi-rent">100 Triệu/tháng</output>
+                        </div>
+                        <input type="range" id="roi-rent" min="15" max="250" step="5" value="100" />
+                      </div>
+
+                      <div class="range-group">
+                        <div class="range-header">
+                          <label for="roi-occupancy">Tỷ lệ lấp đầy trung bình</label>
+                          <output id="roi-occupancy-out" for="roi-occupancy">90%</output>
+                        </div>
+                        <input type="range" id="roi-occupancy" min="50" max="100" step="5" value="90" />
+                      </div>
+
+                      <div class="range-group">
+                        <div class="range-header">
+                          <label for="roi-expense">Chi phí quản lý &amp; bảo trì</label>
+                          <output id="roi-expense-out" for="roi-expense">10% doanh thu</output>
+                        </div>
+                        <input type="range" id="roi-expense" min="0" max="25" step="1" value="10" />
+                      </div>
+
+                      <div class="range-group">
+                        <div class="range-header">
+                          <label for="roi-growth">Tăng giá BĐS kỳ vọng</label>
+                          <output id="roi-growth-out" for="roi-growth">7,5%/năm</output>
+                        </div>
+                        <input type="range" id="roi-growth" min="2" max="15" step="0.5" value="7.5" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="calculator-card" aria-live="polite">
+                    <p class="calc-card-label">Tỷ suất cho thuê ròng hàng năm (Net Yield)</p>
+                    <p class="calc-monthly" id="roi-net-yield">3,24%/năm</p>
+
+                    <div class="calc-bar" aria-hidden="true">
+                      <span class="calc-bar-principal" id="roi-bar-rent"></span>
+                      <span class="calc-bar-interest" id="roi-bar-growth"></span>
+                    </div>
+
+                    <dl class="calc-breakdown">
+                      <div>
+                        <dt>Thu nhập cho thuê ròng/năm</dt>
+                        <dd id="roi-annual-net">0,97 Tỷ VNĐ</dd>
+                      </div>
+                      <div>
+                        <dt>Giá trị tài sản sau 5 năm</dt>
+                        <dd id="roi-5y-value">43,07 Tỷ VNĐ</dd>
+                      </div>
+                      <div>
+                        <dt>Tổng lợi nhuận gộp 5 năm</dt>
+                        <dd id="roi-5y-total">17,93 Tỷ VNĐ</dd>
+                      </div>
+                    </dl>
+
+                    <a href="#consultation" class="btn btn-primary btn-full">Nhận hồ sơ phân tích đầu tư</a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -533,6 +631,25 @@
     <dialog id="property-dialog" class="property-dialog" closedby="any" aria-labelledby="dialog-title">
       <div class="dialog-shell" id="dialog-content"></div>
     </dialog>
+
+    <aside id="compare-tray" class="compare-tray" hidden aria-label="Danh sách bất động sản đang so sánh">
+      <div class="compare-tray-info">
+        <strong>So sánh bất động sản (<span id="compare-count">0</span>/3)</strong>
+        <ul class="compare-chips" id="compare-chips"></ul>
+      </div>
+      <div class="compare-tray-actions">
+        <button type="button" class="btn btn-outline btn-sm compare-clear-btn" id="compare-clear-btn">Xóa hết</button>
+        <button type="button" class="btn btn-accent btn-sm" id="compare-open-btn">So sánh ngay</button>
+      </div>
+    </aside>
+
+    <dialog id="compare-dialog" class="property-dialog compare-dialog" closedby="any" aria-labelledby="compare-dialog-title">
+      <div class="dialog-shell" id="compare-dialog-content"></div>
+    </dialog>
+
+    <div role="region" aria-label="Thông báo trạng thái" class="toast-region" id="toast-region"></div>
+    <p class="visually-hidden">Thông báo trạng thái hệ thống</p>
+    <div id="toast-announcer" aria-live="polite" class="visually-hidden"></div>
 
     <script type="module" src="/src/main.js"></script>
   </body>

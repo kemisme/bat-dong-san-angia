@@ -10,6 +10,9 @@ export const PROPERTIES = [
     status: 'Độc quyền',
     priceBillion: 68.5,
     pricePerSqm: '195 Triệu/m²',
+    pricePerSqmNum: 195,
+    rentalMonthlyMillion: 185,
+    appreciationPct: 7.5,
     area: 350,
     bedrooms: 5,
     bathrooms: 6,
@@ -24,6 +27,12 @@ export const PROPERTIES = [
       'Nội thất nhập khẩu Ý, đá Marble Travertine tự nhiên & gỗ Teak Myanmar',
       'Hệ thống nhà thông minh KNX, thang máy kính 4 điểm dừng và hầm rượu 400 chai',
     ],
+    amenities: [
+      { name: 'Trường Quốc tế BIS Thảo Điền', distance: '4 phút di chuyển' },
+      { name: 'Ga Metro Thảo Điền (Tuyến số 1)', distance: '6 phút di chuyển' },
+      { name: 'Bến du thuyền Sông Sài Gòn', distance: '2 phút đi bộ' },
+      { name: 'Bệnh viện Quốc tế AIH', distance: '8 phút di chuyển' },
+    ],
     paymentPlan: 'Thanh toán 30% nhận nhà ngay, hỗ trợ vay 65% lãi suất ưu đãi 18 tháng.',
   },
   {
@@ -35,6 +44,9 @@ export const PROPERTIES = [
     status: 'Đang mở bán',
     priceBillion: 42.0,
     pricePerSqm: '168 Triệu/m²',
+    pricePerSqmNum: 168,
+    rentalMonthlyMillion: 120,
+    appreciationPct: 8.5,
     area: 250,
     bedrooms: 4,
     bathrooms: 4,
@@ -49,6 +61,12 @@ export const PROPERTIES = [
       'Phòng khách thông tầng kính Low-E cách âm, cách nhiệt chuẩn LEED Gold',
       'Kèm 2 chỗ đậu xe định danh và gói thành viên Sky Lounge riêng tư',
     ],
+    amenities: [
+      { name: 'Cầu Ba Son → Trung tâm Quận 1', distance: '3 phút di chuyển' },
+      { name: 'Công viên Bờ sông Thủ Thiêm', distance: '2 phút đi bộ' },
+      { name: 'Trung tâm Tài chính Quốc tế', distance: '4 phút di chuyển' },
+      { name: 'Nhà hát Giao hưởng Thủ Thiêm', distance: '5 phút di chuyển' },
+    ],
     paymentPlan: 'Ký HĐMB 15%, thanh toán giãn tiến độ 24 tháng đến khi nhận bàn giao.',
   },
   {
@@ -60,6 +78,9 @@ export const PROPERTIES = [
     status: 'Đang mở bán',
     priceBillion: 34.8,
     pricePerSqm: '240 Triệu/m²',
+    pricePerSqmNum: 240,
+    rentalMonthlyMillion: 95,
+    appreciationPct: 7.0,
     area: 145,
     bedrooms: 4,
     bathrooms: 5,
@@ -74,6 +95,12 @@ export const PROPERTIES = [
       'Vỉa hè lát đá granite rộng 6m, hai làn đường rợp bóng cây xanh',
       'Cách công viên Hòa Bình 5 phút di chuyển và tuyến Metro số 2 chỉ 400m',
     ],
+    amenities: [
+      { name: 'Khu Ngoại giao đoàn & Đại sứ quán', distance: '3 phút di chuyển' },
+      { name: 'Ga Metro tuyến số 2', distance: '5 phút đi bộ' },
+      { name: 'Lotte Mall West Lake Hanoi', distance: '6 phút di chuyển' },
+      { name: 'Trường Quốc tế UNIS Hà Nội', distance: '7 phút di chuyển' },
+    ],
     paymentPlan: 'Chiết khấu 6% khi thanh toán sớm, ngân hàng bảo lãnh tiến độ 70%.',
   },
   {
@@ -85,6 +112,9 @@ export const PROPERTIES = [
     status: 'Sắp bàn giao',
     priceBillion: 29.5,
     pricePerSqm: '105 Triệu/m²',
+    pricePerSqmNum: 105,
+    rentalMonthlyMillion: 110,
+    appreciationPct: 8.0,
     area: 280,
     bedrooms: 4,
     bathrooms: 4,
@@ -99,6 +129,12 @@ export const PROPERTIES = [
       'Cách bãi biển Mỹ Khê 3 phút đi bộ, khai thác cho thuê nghỉ dưỡng đạt 8–10%/năm',
       'Hệ thống lọc nước trung tâm và năng lượng mặt trời áp mái tích hợp sẵn',
     ],
+    amenities: [
+      { name: 'Bãi biển Mỹ Khê', distance: '3 phút đi bộ' },
+      { name: 'Khu bảo tồn thiên nhiên Sơn Trà', distance: '6 phút di chuyển' },
+      { name: 'Cầu Rồng & Trung tâm Đà Nẵng', distance: '8 phút di chuyển' },
+      { name: 'Sân bay Quốc tế Đà Nẵng', distance: '14 phút di chuyển' },
+    ],
     paymentPlan: 'Thanh toán 25% đến khi nhận nhà, miễn phí quản lý 3 năm đầu tiên.',
   },
   {
@@ -110,6 +146,9 @@ export const PROPERTIES = [
     status: 'Đang mở bán',
     priceBillion: 9.8,
     pricePerSqm: '92 Triệu/m²',
+    pricePerSqmNum: 92,
+    rentalMonthlyMillion: 38,
+    appreciationPct: 6.5,
     area: 106,
     bedrooms: 3,
     bathrooms: 2,
@@ -124,6 +163,12 @@ export const PROPERTIES = [
       'Hệ thống 38 tiện ích: hồ bơi muối khoáng, phòng gym Technogym, vườn chân mây',
       'Liền kề hệ thống trường quốc tế Canada, SSIS và trung tâm thương mại Crescent Mall',
     ],
+    amenities: [
+      { name: 'Trường Quốc tế Canada & SSIS', distance: '4 phút di chuyển' },
+      { name: 'TTTM Crescent Mall & Hồ Bán Nguyệt', distance: '5 phút di chuyển' },
+      { name: 'Bệnh viện Pháp Việt (FV)', distance: '6 phút di chuyển' },
+      { name: 'Công viên ven sông 1,2km', distance: '1 phút đi bộ' },
+    ],
     paymentPlan: 'Hỗ trợ lãi suất 0% trong 24 tháng, nhận nhà vào ở hoặc cho thuê ngay.',
   },
   {
@@ -135,6 +180,9 @@ export const PROPERTIES = [
     status: 'Độc quyền',
     priceBillion: 38.2,
     pricePerSqm: '182 Triệu/m²',
+    pricePerSqmNum: 182,
+    rentalMonthlyMillion: 115,
+    appreciationPct: 7.5,
     area: 210,
     bedrooms: 3,
     bathrooms: 4,
@@ -148,6 +196,12 @@ export const PROPERTIES = [
       'Cộng đồng cư dân tinh hoa chỉ 48 căn hộ giới hạn trên toàn dự án',
       'Trang bị hệ thống sưởi sàn mùa đông và điều hòa âm trần Daikin VRV',
       'Dịch vụ Concierge chuẩn khách sạn 5 sao phục vụ 24/7',
+    ],
+    amenities: [
+      { name: 'Mặt nước & Đường dạo Hồ Tây', distance: '1 phút đi bộ' },
+      { name: 'Phủ Tây Hồ & Công viên Nước', distance: '4 phút di chuyển' },
+      { name: 'Khu ẩm thực quốc tế Xuân Diệu', distance: '2 phút di chuyển' },
+      { name: 'Hồ Hoàn Kiếm & Nhà hát Lớn', distance: '12 phút di chuyển' },
     ],
     paymentPlan: 'Bàn giao hoàn thiện nội thất cao cấp, công chứng sang tên trong 15 ngày.',
   },
@@ -216,7 +270,7 @@ export const FAQS = [
   },
 ];
 
-function escapeHtml(value) {
+export function escapeHtml(value) {
   return String(value)
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
@@ -247,7 +301,8 @@ export function renderPictureHtml({
   </picture>`;
 }
 
-export function renderPropertyCardHtml(item, { base = './', isSaved = false } = {}) {
+export function renderPropertyCardHtml(item, { base = './', isSaved = false, isCompared = false } = {}) {
+  const safeTitle = escapeHtml(item.title);
   return `
     <article class="property-card-wrap" data-property-id="${item.id}">
       <div class="card-media">
@@ -269,7 +324,7 @@ export function renderPropertyCardHtml(item, { base = './', isSaved = false } = 
           class="save-btn"
           data-save-id="${item.id}"
           aria-pressed="${isSaved ? 'true' : 'false'}"
-          aria-label="${isSaved ? 'Bỏ lưu' : 'Lưu'} ${escapeHtml(item.title)}"
+          aria-label="${isSaved ? 'Bỏ lưu' : 'Lưu'} ${safeTitle}"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -279,7 +334,7 @@ export function renderPropertyCardHtml(item, { base = './', isSaved = false } = 
 
       <header class="card-header">
         <p class="card-location">${escapeHtml(item.district)} · ${escapeHtml(item.city)}</p>
-        <h3 class="card-title">${escapeHtml(item.title)}</h3>
+        <h3 class="card-title">${safeTitle}</h3>
       </header>
 
       <div class="card-body">
@@ -297,9 +352,20 @@ export function renderPropertyCardHtml(item, { base = './', isSaved = false } = 
           <strong>${item.priceBillion.toFixed(1).replace('.', ',')} Tỷ</strong>
           <span>${escapeHtml(item.pricePerSqm)}</span>
         </div>
-        <button type="button" class="btn btn-primary btn-sm" data-open-id="${item.id}">
-          Xem chi tiết
-        </button>
+        <div class="card-actions">
+          <button
+            type="button"
+            class="btn btn-outline btn-sm compare-toggle-btn"
+            data-compare-id="${item.id}"
+            aria-pressed="${isCompared ? 'true' : 'false'}"
+            aria-label="So sánh ${safeTitle}"
+          >
+            So sánh
+          </button>
+          <button type="button" class="btn btn-primary btn-sm" data-open-id="${item.id}">
+            Xem chi tiết
+          </button>
+        </div>
       </footer>
     </article>
   `;
@@ -389,7 +455,7 @@ export function buildJsonLd(siteUrl = SITE_URL) {
             '@type': 'RealEstateListing',
             name: item.title,
             description: item.summary,
-            url: `${siteUrl}#listings`,
+            url: `${siteUrl}?du-an=${item.id}`,
             image: `${siteUrl}images/${item.imageSlug}-1200.jpg`,
             offers: {
               '@type': 'Offer',

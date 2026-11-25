@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@microsoft/focusgroup-polyfill": "^1.6.0",
     "@oddbird/popover-polyfill": "^0.6.1"
   },
   "devDependencies": {
