@@ -378,26 +378,34 @@ textarea {
 
 @media (max-width: 560px) {
   .container {
-    inline-size: min(1240px, 100% - 1.25rem);
+    inline-size: min(1240px, 100% - 1rem);
   }
 
   .header-inner {
+    gap: 0.35rem;
+  }
+
+  .site-logo {
     gap: 0.4rem;
   }
 
   .logo-mark {
-    inline-size: 2rem;
-    block-size: 2rem;
-    border-radius: 9px;
+    inline-size: 1.9rem;
+    block-size: 1.9rem;
+    border-radius: 8px;
   }
 
   .logo-text strong {
-    font-size: 0.96rem;
+    font-size: 0.88rem;
   }
 
   .logo-text small,
   .saved-label {
     display: none;
+  }
+
+  .header-actions {
+    gap: 0.35rem;
   }
 
   .menu-button span {
@@ -412,8 +420,8 @@ textarea {
   .menu-button,
   .saved-pill,
   .post-cta-btn {
-    padding: 0.42rem 0.62rem;
-    font-size: 0.84rem;
+    padding: 0.38rem 0.52rem;
+    font-size: 0.8rem;
   }
 }
 
