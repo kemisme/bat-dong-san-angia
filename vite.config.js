@@ -15,6 +15,7 @@ const base = process.env.BASE_PATH || '/';
 function prerenderAndInlineCss() {
   return {
     name: 'prerender-real-estate-html',
+    enforce: 'post',
     transformIndexHtml(html) {
       const propertiesHtml = PROPERTIES.map((item) =>
         renderPropertyCardHtml(item, { base: './', isSaved: false }),
