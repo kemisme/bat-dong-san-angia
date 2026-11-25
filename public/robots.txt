@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kemisme.github.io/bat-dong-san-angia/sitemap.xml

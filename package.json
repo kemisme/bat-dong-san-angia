@@ -12,6 +12,7 @@
     "@oddbird/popover-polyfill": "^0.6.1"
   },
   "devDependencies": {
+    "sharp": "^0.35.5",
     "vite": "^6.0.0"
   }
 }

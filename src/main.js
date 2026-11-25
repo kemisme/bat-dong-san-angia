@@ -1,10 +1,17 @@
 import './styles/main.css';
-import { PROPERTIES, NEIGHBORHOODS } from './data/properties.js';
+import {
+  PROPERTIES,
+  NEIGHBORHOODS,
+  renderPictureHtml,
+  renderPropertyCardHtml,
+  renderNeighborhoodCardHtml,
+} from './data/properties.js';
 
 if (!Object.hasOwn(HTMLElement.prototype, 'popover')) {
   import('@oddbird/popover-polyfill');
 }
 
+const base = import.meta.env.BASE_URL;
 const STORAGE_KEY = 'angia-saved-properties';
 
 const state = {
@@ -43,23 +50,23 @@ const els = {
   resetFormBtn: document.getElementById('reset-form-btn'),
 };
 
-/* ---------- Adaptive Navbar (navbar guide) ---------- */
+/* ---------- Adaptive Navbar (avoid layout thrashing in ResizeObserver) ---------- */
 function setupAdaptiveNavbar() {
   const { header, headerInner, siteMenu } = els;
   if (!header || !headerInner || !siteMenu) return;
 
-  let prevWidth = 0;
+  let lastMeasuredWidth = -1;
+  let rafId = 0;
 
   const measureAndSync = () => {
-    const currentWidth = header.getBoundingClientRect().width;
-    const isCurrentlyWide = header.classList.contains('is-wide');
-    if (!isCurrentlyWide && currentWidth <= prevWidth && prevWidth !== 0) {
-      prevWidth = currentWidth;
-      return;
-    }
-    prevWidth = currentWidth;
+    rafId = 0;
+    const currentWidth = Math.round(header.getBoundingClientRect().width);
+    if (currentWidth === lastMeasuredWidth) return;
+    lastMeasuredWidth = currentWidth;
 
-    const wasPopoverOpen = siteMenu.matches(':popover-open') || siteMenu.classList.contains(':popover-open');
+    const wasPopoverOpen =
+      siteMenu.matches(':popover-open') || siteMenu.classList.contains(':popover-open');
+
     header.classList.add('is-measuring');
     header.classList.add('is-wide');
     siteMenu.removeAttribute('popover');
@@ -83,10 +90,17 @@ function setupAdaptiveNavbar() {
     });
   };
 
-  const ro = new ResizeObserver(() => measureAndSync());
+  const scheduleMeasure = (force = false) => {
+    if (force) lastMeasuredWidth = -1;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(measureAndSync);
+  };
+
+  // Observe only the header width, never siteMenu, to prevent self-triggering resize loops
+  const ro = new ResizeObserver(() => scheduleMeasure(false));
   ro.observe(header);
-  ro.observe(siteMenu);
   measureAndSync();
+  document.fonts?.ready.then(() => scheduleMeasure(true));
 
   const navLinks = siteMenu.querySelectorAll('a[href^="#"]');
   navLinks.forEach((link) => {
@@ -136,6 +150,18 @@ function updateSavedCounter() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify([...state.savedIds]));
 }
 
+function syncSavedButtonsInPlace() {
+  els.propertyGrid.querySelectorAll('[data-save-id]').forEach((btn) => {
+    const id = btn.dataset.saveId;
+    const item = PROPERTIES.find((p) => p.id === id);
+    const isSaved = state.savedIds.has(id);
+    btn.setAttribute('aria-pressed', isSaved ? 'true' : 'false');
+    if (item) {
+      btn.setAttribute('aria-label', `${isSaved ? 'Bỏ lưu' : 'Lưu'} ${item.title}`);
+    }
+  });
+}
+
 function renderProperties() {
   const items = getFilteredProperties();
   els.resultsSummary.textContent = state.onlySaved
@@ -155,62 +181,12 @@ function renderProperties() {
   }
 
   els.propertyGrid.innerHTML = items
-    .map((item) => {
-      const isSaved = state.savedIds.has(item.id);
-      return `
-        <article class="property-card-wrap">
-          <div class="card-media">
-            <img
-              src="${item.image}"
-              alt="${item.title} tại ${item.district}"
-              width="640"
-              height="400"
-              loading="lazy"
-            />
-            <div class="card-badges">
-              <span class="badge">${item.type}</span>
-              <span class="badge badge-accent">${item.status}</span>
-            </div>
-            <button
-              type="button"
-              class="save-btn"
-              data-save-id="${item.id}"
-              aria-pressed="${isSaved ? 'true' : 'false'}"
-              aria-label="${isSaved ? 'Bỏ lưu' : 'Lưu'} ${item.title}"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-              </svg>
-            </button>
-          </div>
-
-          <header class="card-header">
-            <p class="card-location">${item.district} · ${item.city}</p>
-            <h3 class="card-title">${item.title}</h3>
-          </header>
-
-          <div class="card-body">
-            <p class="card-summary">${item.summary}</p>
-            <ul class="card-specs">
-              <li>${item.area} m²</li>
-              <li>${item.bedrooms} Phòng ngủ</li>
-              <li>${item.bathrooms} Phòng tắm</li>
-              <li>${item.handover}</li>
-            </ul>
-          </div>
-
-          <footer class="card-footer">
-            <div class="card-price">
-              <strong>${item.priceBillion.toFixed(1).replace('.', ',')} Tỷ</strong>
-              <span>${item.pricePerSqm}</span>
-            </div>
-            <button type="button" class="btn btn-primary btn-sm" data-open-id="${item.id}">
-              Xem chi tiết
-            </button>
-          </footer>
-        </article>
-      `;
-    })
+    .map((item) =>
+      renderPropertyCardHtml(item, {
+        base,
+        isSaved: state.savedIds.has(item.id),
+      }),
+    )
     .join('');
 }
 
@@ -235,25 +211,32 @@ function syncFilterPills() {
   });
 }
 
-function renderNeighborhoods() {
-  els.neighborhoodGrid.innerHTML = NEIGHBORHOODS.map(
-    (area) => `
-      <button type="button" class="neighborhood-card" data-city-pick="${area.city}">
-        <img src="${area.image}" alt="${area.name}" width="640" height="420" loading="lazy" />
-        <div class="neighborhood-overlay">
-          <h3>${area.name}</h3>
-          <p>${area.subtitle}</p>
-          <div class="neighborhood-meta">
-            <span>${area.count}</span>
-            <span>${area.avgPrice}</span>
-          </div>
-        </div>
-      </button>
-    `,
+function ensureNeighborhoodsRendered() {
+  if (els.neighborhoodGrid.children.length > 0) return;
+  els.neighborhoodGrid.innerHTML = NEIGHBORHOODS.map((area) =>
+    renderNeighborhoodCardHtml(area, { base }),
   ).join('');
 }
 
-/* ---------- Native Modal Dialog (dialog + light-dismiss + scroll containment) ---------- */
+/* ---------- FAQ Accordion ---------- */
+function setupFaqAccordion() {
+  const faqList = document.getElementById('faq-list');
+  if (!faqList) return;
+
+  faqList.addEventListener('click', (e) => {
+    const trigger = e.target.closest('.faq-trigger');
+    if (!trigger) return;
+    const panelId = trigger.getAttribute('aria-controls');
+    const panel = panelId ? document.getElementById(panelId) : null;
+    if (!panel) return;
+
+    const expanded = trigger.getAttribute('aria-expanded') === 'true';
+    trigger.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+    panel.hidden = expanded;
+  });
+}
+
+/* ---------- Native Modal Dialog ---------- */
 function setupDialog() {
   const { dialog } = els;
   if (!dialog) return;
@@ -283,14 +266,16 @@ function openPropertyDialog(propertyId) {
 
   els.dialogContent.innerHTML = `
     <div class="dialog-hero">
-      <img
-        src="${item.image}"
-        alt="${item.title}"
-        width="880"
-        height="440"
-        fetchpriority="low"
-        loading="lazy"
-      />
+      ${renderPictureHtml({
+        slug: item.imageSlug,
+        alt: item.title,
+        width: 880,
+        height: 440,
+        sizes: '(max-width: 900px) 92vw, 880px',
+        base,
+        loading: 'lazy',
+        fetchpriority: 'low',
+      })}
       <form method="dialog">
         <button type="submit" class="dialog-close" value="close" aria-label="Đóng hộp thoại chi tiết">✕</button>
       </form>
@@ -386,7 +371,7 @@ function updateMortgageCalculator() {
   document.getElementById('calc-bar-interest').style.inlineSize = `${(100 - principalRatio).toFixed(1)}%`;
 }
 
-/* ---------- Consultation Form Validation (validate-input-after-interaction guide) ---------- */
+/* ---------- Consultation Form Validation ---------- */
 function setupFormValidation(form) {
   if (!form) return;
 
@@ -606,7 +591,8 @@ function bindEvents() {
       if (state.savedIds.has(id)) state.savedIds.delete(id);
       else state.savedIds.add(id);
       updateSavedCounter();
-      renderProperties();
+      if (state.onlySaved) renderProperties();
+      else syncSavedButtonsInPlace();
       return;
     }
 
@@ -648,10 +634,18 @@ function init() {
 
   setupAdaptiveNavbar();
   setupDialog();
+  setupFaqAccordion();
   setupFormValidation(els.consultationForm);
   updateSavedCounter();
-  renderNeighborhoods();
-  renderProperties();
+  ensureNeighborhoodsRendered();
+
+  // Preserve SSR pre-rendered cards on initial load; sync saved state in place if needed
+  if (els.propertyGrid.children.length === 0) {
+    renderProperties();
+  } else if (state.savedIds.size > 0) {
+    syncSavedButtonsInPlace();
+  }
+
   updateMortgageCalculator();
   bindEvents();
 }

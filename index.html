@@ -7,26 +7,86 @@
       name="description"
       content="AnGia Premier — Sàn giao dịch & tư vấn bất động sản hạng sang tại TP.HCM, Hà Nội, Đà Nẵng. Biệt thự ven sông, Penthouse, Nhà phố pháp lý minh bạch."
     />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta name="theme-color" content="#142b26" />
     <title>AnGia Premier — Bất Động Sản Hạng Sang &amp; Đầu Tư Đô Thị</title>
+
+    <link rel="canonical" href="https://kemisme.github.io/bat-dong-san-angia/" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="manifest" href="./site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:site_name" content="AnGia Premier Realty" />
+    <meta property="og:title" content="AnGia Premier — Bất Động Sản Hạng Sang & Đầu Tư Đô Thị" />
+    <meta
+      property="og:description"
+      content="Tuyển chọn biệt thự ven sông Thảo Điền, Sky Penthouse Thủ Thiêm, nhà phố Tây Hồ và biệt thự biển Sơn Trà pháp lý minh bạch."
+    />
+    <meta property="og:url" content="https://kemisme.github.io/bat-dong-san-angia/" />
+    <meta
+      property="og:image"
+      content="https://kemisme.github.io/bat-dong-san-angia/images/hero-villa-1200.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="670" />
+    <meta
+      property="og:image:alt"
+      content="Biệt thự ven sông Thảo Điền Serenity với hồ bơi tràn viền lúc hoàng hôn"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="AnGia Premier — Bất Động Sản Hạng Sang & Đầu Tư Đô Thị" />
+    <meta
+      name="twitter:description"
+      content="Tuyển chọn biệt thự ven sông, Penthouse và nhà phố thương mại cao cấp tại TP.HCM, Hà Nội, Đà Nẵng."
+    />
+    <meta
+      name="twitter:image"
+      content="https://kemisme.github.io/bat-dong-san-angia/images/hero-villa-1200.jpg"
+    />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      />
+    </noscript>
+
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      imagesrcset="./images/hero-villa-640.avif 640w, ./images/hero-villa-1200.avif 1200w"
+      imagesizes="100vw"
+      fetchpriority="high"
+    />
+
+    <!--SSR_JSON_LD-->
   </head>
   <body>
     <a class="skip-link" href="#main-content">Chuyển tới nội dung chính</a>
 
     <header class="site-header" id="site-header">
       <div class="header-inner container">
-        <a class="site-logo" href="#top" aria-label="AnGia Premier Trang chủ">
+        <a class="site-logo" href="#top">
           <span class="logo-mark" aria-hidden="true">A</span>
           <span class="logo-text">
             <strong>AnGia Premier</strong>
             <small>Luxury Real Estate</small>
           </span>
+          <span class="visually-hidden"> — Trang chủ</span>
         </a>
 
         <nav class="site-nav" aria-label="Điều hướng chính">
@@ -50,6 +110,7 @@
             <li><a href="#listings">Dự án nổi bật</a></li>
             <li><a href="#neighborhoods">Khu vực</a></li>
             <li><a href="#calculator">Tính khoản vay</a></li>
+            <li><a href="#faq">Hỏi đáp</a></li>
             <li><a href="#consultation">Đặt lịch tư vấn</a></li>
           </ul>
         </nav>
@@ -68,14 +129,28 @@
 
     <main id="main-content">
       <section class="hero" id="top" aria-labelledby="hero-heading">
-        <img
-          class="hero-media"
-          src="./images/hero-villa.jpg"
-          alt="Biệt thự ven sông hiện đại với hồ bơi tràn viền lúc hoàng hôn"
-          width="1600"
-          height="900"
-          fetchpriority="high"
-        />
+        <picture class="hero-picture">
+          <source
+            type="image/avif"
+            srcset="./images/hero-villa-640.avif 640w, ./images/hero-villa-1200.avif 1200w"
+            sizes="100vw"
+          />
+          <source
+            type="image/webp"
+            srcset="./images/hero-villa-640.webp 640w, ./images/hero-villa-1200.webp 1200w"
+            sizes="100vw"
+          />
+          <img
+            class="hero-media"
+            src="./images/hero-villa-1200.jpg"
+            alt="Biệt thự ven sông hiện đại với hồ bơi tràn viền lúc hoàng hôn"
+            width="1200"
+            height="670"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+        </picture>
         <div class="hero-scrim" aria-hidden="true"></div>
 
         <div class="hero-content container">
@@ -180,7 +255,7 @@
             Đang hiển thị 6 bất động sản phù hợp
           </p>
 
-          <div class="property-grid" id="property-grid"></div>
+          <div class="property-grid" id="property-grid"><!--SSR_PROPERTIES--></div>
         </div>
       </section>
 
@@ -196,7 +271,7 @@
             </p>
           </div>
 
-          <div class="neighborhood-grid" id="neighborhood-grid"></div>
+          <div class="neighborhood-grid" id="neighborhood-grid"><!--SSR_NEIGHBORHOODS--></div>
         </div>
       </section>
 
@@ -270,6 +345,19 @@
 
             <a href="#consultation" class="btn btn-primary btn-full">Nhận bảng tính chi tiết từ chuyên viên</a>
           </div>
+        </div>
+      </section>
+
+      <section class="section faq-section" id="faq" aria-labelledby="faq-heading">
+        <div class="container faq-layout">
+          <div class="faq-intro">
+            <p class="section-kicker">Giải đáp chuyên sâu</p>
+            <h2 id="faq-heading">Câu Hỏi Thường Gặp Khi Giao Dịch</h2>
+            <p>
+              Tổng hợp các câu hỏi quan trọng về pháp lý, thủ tục vay ngân hàng, thuế phí công chứng và quy trình tham quan dự án thực tế.
+            </p>
+          </div>
+          <div class="faq-list" id="faq-list"><!--SSR_FAQS--></div>
         </div>
       </section>
 
@@ -433,6 +521,7 @@
             <li><a href="#listings">Danh mục bất động sản</a></li>
             <li><a href="#neighborhoods">Khu vực trọng điểm</a></li>
             <li><a href="#calculator">Công cụ tính khoản vay</a></li>
+            <li><a href="#faq">Câu hỏi thường gặp</a></li>
             <li><a href="#consultation">Đặt lịch tham quan</a></li>
           </ul>
         </div>

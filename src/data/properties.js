@@ -1,4 +1,4 @@
-const base = import.meta.env.BASE_URL;
+export const SITE_URL = 'https://kemisme.github.io/bat-dong-san-angia/';
 
 export const PROPERTIES = [
   {
@@ -16,7 +16,7 @@ export const PROPERTIES = [
     direction: 'Đông Nam',
     legal: 'Sổ hồng riêng, hoàn công đầy đủ',
     handover: 'Bàn giao ngay',
-    image: `${base}images/hero-villa.jpg`,
+    imageSlug: 'hero-villa',
     summary:
       'Biệt thự đơn lập mặt sông Sài Gòn với hồ bơi tràn viền, sân vườn nhiệt đới riêng tư và hệ kính kịch trần đón ánh sáng tự nhiên.',
     highlights: [
@@ -41,7 +41,7 @@ export const PROPERTIES = [
     direction: 'Tây Nam (View Sông & Bitexco)',
     legal: 'Sổ hồng sở hữu lâu dài',
     handover: 'Quý II/2027',
-    image: `${base}images/penthouse-interior.jpg`,
+    imageSlug: 'penthouse-interior',
     summary:
       'Không gian sống tầng mây với tầm nhìn 270 độ ôm trọn sông Sài Gòn và trung tâm Quận 1, trần thông tầng cao 6,4m.',
     highlights: [
@@ -66,7 +66,7 @@ export const PROPERTIES = [
     direction: 'Nam',
     legal: 'Sổ đỏ lâu dài từng căn',
     handover: 'Quý IV/2026',
-    image: `${base}images/townhouse-facade.jpg`,
+    imageSlug: 'townhouse-facade',
     summary:
       'Tọa lạc trên đại lộ trung tâm 30m kết nối Hồ Tây và khu ngoại giao đoàn, kiến trúc tân cổ điển kết hợp công năng ở và kinh doanh.',
     highlights: [
@@ -91,7 +91,7 @@ export const PROPERTIES = [
     direction: 'Đông',
     legal: 'Sổ hồng lâu dài',
     handover: 'Quý I/2027',
-    image: `${base}images/garden-villa.jpg`,
+    imageSlug: 'garden-villa',
     summary:
       'Ốc đảo nghỉ dưỡng giữa thiên nhiên xanh mát chân núi Sơn Trà, thiết kế lam gỗ tự nhiên cùng hồ cá Koi và hiên trà đạo.',
     highlights: [
@@ -116,7 +116,7 @@ export const PROPERTIES = [
     direction: 'Đông Bắc',
     legal: 'Sổ hồng riêng',
     handover: 'Bàn giao ngay',
-    image: `${base}images/waterfront-tower.jpg`,
+    imageSlug: 'waterfront-tower',
     summary:
       'Căn hộ góc 3 phòng ngủ hướng công viên ven sông với đường dạo bộ gỗ dài 1,2km, tiện ích resort 5 sao ngay thềm nhà.',
     highlights: [
@@ -141,7 +141,7 @@ export const PROPERTIES = [
     direction: 'Đông Nam (View Hồ Tây)',
     legal: 'Sổ hồng vĩnh viễn',
     handover: 'Bàn giao ngay',
-    image: `${base}images/penthouse-interior.jpg`,
+    imageSlug: 'penthouse-interior',
     summary:
       'Duplex thông tầng hiếm có tại bán đảo Quảng An với sân vườn trên cao 45m² và tầm nhìn trực diện mặt nước Hồ Tây.',
     highlights: [
@@ -161,7 +161,7 @@ export const NEIGHBORHOODS = [
     subtitle: 'Trung tâm tài chính & cộng đồng quốc tế bên sông Sài Gòn',
     count: '38 sản phẩm chọn lọc',
     avgPrice: '92 – 210 Triệu/m²',
-    image: `${base}images/waterfront-tower.jpg`,
+    imageSlug: 'waterfront-tower',
   },
   {
     id: 'hanoi',
@@ -170,7 +170,7 @@ export const NEIGHBORHOODS = [
     subtitle: 'Di sản sống thanh bình bên hồ nước lớn nhất Thủ đô',
     count: '24 sản phẩm chọn lọc',
     avgPrice: '165 – 260 Triệu/m²',
-    image: `${base}images/townhouse-facade.jpg`,
+    imageSlug: 'townhouse-facade',
   },
   {
     id: 'danang',
@@ -179,6 +179,241 @@ export const NEIGHBORHOODS = [
     subtitle: 'Bất động sản nghỉ dưỡng biển kết hợp an cư dài lâu',
     count: '19 sản phẩm chọn lọc',
     avgPrice: '85 – 140 Triệu/m²',
-    image: `${base}images/garden-villa.jpg`,
+    imageSlug: 'garden-villa',
   },
 ];
+
+export const FAQS = [
+  {
+    id: 'faq-legal',
+    question: 'Pháp lý các dự án tại AnGia Premier được kiểm tra như thế nào trước khi giao dịch?',
+    answer:
+      'Mọi bất động sản trong danh mục phân phối đều được đội ngũ pháp chế thẩm định đầy đủ hồ sơ trước khi giới thiệu: giấy chứng nhận quyền sử dụng đất (sổ hồng/sổ đỏ), quy hoạch 1/500, giấy phép xây dựng, văn bản nghiệm thu hoàn công và xác nhận không tranh chấp thế chấp.',
+  },
+  {
+    id: 'faq-loan',
+    question: 'Khách hàng được hỗ trợ vay ngân hàng tối đa bao nhiêu phần trăm giá trị căn nhà?',
+    answer:
+      'Đối với các bất động sản đã có sổ hồng hoặc dự án có ngân hàng bảo lãnh, khách hàng có thể vay tối đa 65% đến 70% giá trị tài sản với thời hạn lên đến 35 năm. AnGia Premier liên kết trực tiếp các ngân hàng lớn để áp dụng gói ân hạn gốc và lãi suất ưu đãi 12–24 tháng đầu.',
+  },
+  {
+    id: 'faq-fees',
+    question: 'Chi phí sang tên công chứng và thuế mua bán bất động sản gồm những khoản nào?',
+    answer:
+      'Khi chuyển nhượng nhà đất đã có sổ, giao dịch gồm lệ phí trước bạ (0,5% giá trị tính thuế), thuế thu nhập cá nhân bên bán (2% theo thỏa thuận hợp đồng), phí công chứng và lệ phí thẩm định hồ sơ cấp đổi sổ. Với căn hộ hình thành trong tương lai sẽ áp dụng phí bảo trì 2% khi nhận bàn giao.',
+  },
+  {
+    id: 'faq-tour',
+    question: 'Quy trình đặt lịch xem thực tế và nhận bảng tính dòng tiền diễn ra ra sao?',
+    answer:
+      'Sau khi bạn gửi thông tin qua biểu mẫu đặt lịch hoặc chọn căn muốn xem, chuyên viên phụ trách khu vực sẽ liên hệ trong 15 phút làm việc để gửi hồ sơ mặt bằng, bảng giá chi tiết, phương án vay ngân hàng và sắp xếp lịch tham quan thực tế 1:1 theo khung giờ bạn mong muốn.',
+  },
+  {
+    id: 'faq-foreign',
+    question: 'Việt kiều và người nước ngoài có thể sở hữu bất động sản tại AnGia Premier không?',
+    answer:
+      'Có. Theo Luật Nhà ở và Luật Đất đai hiện hành, người Việt Nam định cư ở nước ngoài (còn quốc tịch Việt Nam hoặc gốc Việt) và cá nhân nước ngoài nhập cảnh hợp pháp được phép mua, sở hữu nhà ở thương mại nằm ngoài khu vực quốc phòng an ninh trong hạn mức quy định của từng dự án.',
+  },
+];
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
+}
+
+export function renderPictureHtml({
+  slug,
+  alt,
+  width = 640,
+  height = 400,
+  sizes = '(max-width: 720px) 100vw, 400px',
+  base = './',
+  className = '',
+  loading = 'lazy',
+  fetchpriority = '',
+}) {
+  const safeAlt = escapeHtml(alt);
+  const classAttr = className ? ` class="${escapeHtml(className)}"` : '';
+  const priorityAttr = fetchpriority ? ` fetchpriority="${fetchpriority}"` : '';
+  const loadingAttr = loading ? ` loading="${loading}"` : '';
+
+  return `<picture>
+    <source type="image/avif" srcset="${base}images/${slug}-640.avif 640w, ${base}images/${slug}-1200.avif 1200w" sizes="${sizes}" />
+    <source type="image/webp" srcset="${base}images/${slug}-640.webp 640w, ${base}images/${slug}-1200.webp 1200w" sizes="${sizes}" />
+    <img${classAttr} src="${base}images/${slug}-800.jpg" alt="${safeAlt}" width="${width}" height="${height}"${loadingAttr}${priorityAttr} decoding="async" />
+  </picture>`;
+}
+
+export function renderPropertyCardHtml(item, { base = './', isSaved = false } = {}) {
+  return `
+    <article class="property-card-wrap" data-property-id="${item.id}">
+      <div class="card-media">
+        ${renderPictureHtml({
+          slug: item.imageSlug,
+          alt: `${item.title} tại ${item.district}`,
+          width: 640,
+          height: 400,
+          sizes: '(max-width: 720px) 100vw, (max-width: 1120px) 50vw, 390px',
+          base,
+          loading: 'lazy',
+        })}
+        <div class="card-badges">
+          <span class="badge">${escapeHtml(item.type)}</span>
+          <span class="badge badge-accent">${escapeHtml(item.status)}</span>
+        </div>
+        <button
+          type="button"
+          class="save-btn"
+          data-save-id="${item.id}"
+          aria-pressed="${isSaved ? 'true' : 'false'}"
+          aria-label="${isSaved ? 'Bỏ lưu' : 'Lưu'} ${escapeHtml(item.title)}"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+          </svg>
+        </button>
+      </div>
+
+      <header class="card-header">
+        <p class="card-location">${escapeHtml(item.district)} · ${escapeHtml(item.city)}</p>
+        <h3 class="card-title">${escapeHtml(item.title)}</h3>
+      </header>
+
+      <div class="card-body">
+        <p class="card-summary">${escapeHtml(item.summary)}</p>
+        <ul class="card-specs">
+          <li>${item.area} m²</li>
+          <li>${item.bedrooms} Phòng ngủ</li>
+          <li>${item.bathrooms} Phòng tắm</li>
+          <li>${escapeHtml(item.handover)}</li>
+        </ul>
+      </div>
+
+      <footer class="card-footer">
+        <div class="card-price">
+          <strong>${item.priceBillion.toFixed(1).replace('.', ',')} Tỷ</strong>
+          <span>${escapeHtml(item.pricePerSqm)}</span>
+        </div>
+        <button type="button" class="btn btn-primary btn-sm" data-open-id="${item.id}">
+          Xem chi tiết
+        </button>
+      </footer>
+    </article>
+  `;
+}
+
+export function renderNeighborhoodCardHtml(area, { base = './' } = {}) {
+  return `
+    <button type="button" class="neighborhood-card" data-city-pick="${escapeHtml(area.city)}">
+      ${renderPictureHtml({
+        slug: area.imageSlug,
+        alt: `${area.name} — ${area.city}`,
+        width: 640,
+        height: 420,
+        sizes: '(max-width: 720px) 100vw, 390px',
+        base,
+        loading: 'lazy',
+      })}
+      <div class="neighborhood-overlay">
+        <h3>${escapeHtml(area.name)}</h3>
+        <p>${escapeHtml(area.subtitle)}</p>
+        <div class="neighborhood-meta">
+          <span>${escapeHtml(area.count)}</span>
+          <span>${escapeHtml(area.avgPrice)}</span>
+        </div>
+      </div>
+    </button>
+  `;
+}
+
+export function renderFaqItemHtml(faq, index) {
+  const panelId = `faq-panel-${index + 1}`;
+  return `
+    <article class="faq-item">
+      <h3>
+        <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="${panelId}">
+          <span>${escapeHtml(faq.question)}</span>
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+      </h3>
+      <div id="${panelId}" class="faq-panel" hidden>
+        <p>${escapeHtml(faq.answer)}</p>
+      </div>
+    </article>
+  `;
+}
+
+export function buildJsonLd(siteUrl = SITE_URL) {
+  const graph = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'RealEstateAgent',
+        '@id': `${siteUrl}#organization`,
+        name: 'AnGia Premier Realty',
+        url: siteUrl,
+        logo: `${siteUrl}favicon.svg`,
+        image: `${siteUrl}images/hero-villa-1200.jpg`,
+        description:
+          'Sàn giao dịch & tư vấn bất động sản hạng sang tại TP.HCM, Hà Nội, Đà Nẵng. Biệt thự ven sông, Penthouse, Nhà phố pháp lý minh bạch.',
+        telephone: '+84-1900-6868',
+        areaServed: ['TP. Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng'],
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: '88 Song Hành, Thảo Điền',
+          addressLocality: 'TP. Thủ Đức',
+          addressRegion: 'TP. Hồ Chí Minh',
+          addressCountry: 'VN',
+        },
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}#website`,
+        url: siteUrl,
+        name: 'AnGia Premier — Bất Động Sản Hạng Sang & Đầu Tư Đô Thị',
+        inLanguage: 'vi-VN',
+        publisher: { '@id': `${siteUrl}#organization` },
+      },
+      {
+        '@type': 'ItemList',
+        '@id': `${siteUrl}#listings`,
+        name: 'Danh mục bất động sản nổi bật AnGia Premier',
+        numberOfItems: PROPERTIES.length,
+        itemListElement: PROPERTIES.map((item, idx) => ({
+          '@type': 'ListItem',
+          position: idx + 1,
+          item: {
+            '@type': 'RealEstateListing',
+            name: item.title,
+            description: item.summary,
+            url: `${siteUrl}#listings`,
+            image: `${siteUrl}images/${item.imageSlug}-1200.jpg`,
+            offers: {
+              '@type': 'Offer',
+              price: Math.round(item.priceBillion * 1_000_000_000),
+              priceCurrency: 'VND',
+              availability: 'https://schema.org/InStock',
+            },
+          },
+        })),
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': `${siteUrl}#faq`,
+        mainEntity: FAQS.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: faq.answer,
+          },
+        })),
+      },
+    ],
+  };
+
+  return `<script type="application/ld+json">${JSON.stringify(graph)}</script>`;
+}
