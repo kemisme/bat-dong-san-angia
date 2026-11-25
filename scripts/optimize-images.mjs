@@ -3,84 +3,95 @@ import path from 'node:path';
 import sharp from 'sharp';
 
 const ROOT = process.cwd();
-const SRC_DIR = path.join(ROOT, 'public', 'images');
+const PUB_IMG_DIR = path.join(ROOT, 'public', 'images');
 const RAW_DIR = path.join(ROOT, 'assets-raw');
+const VALID_EXTS = new Set(['.jpg', '.jpeg', '.png', '.webp']);
+const GENERATED_SUFFIX_RE = /-(640|800|1200)\.(avif|webp|jpg)$/i;
 
-const SLUGS = [
-  'hero-villa',
-  'penthouse-interior',
-  'townhouse-facade',
-  'garden-villa',
-  'waterfront-tower',
-];
+async function collectRawSources() {
+  await fs.mkdir(RAW_DIR, { recursive: true });
+  await fs.mkdir(PUB_IMG_DIR, { recursive: true });
+
+  // Also pick up any newly dropped raw images placed directly inside public/images/
+  const pubFiles = await fs.readdir(PUB_IMG_DIR);
+  for (const file of pubFiles) {
+    const ext = path.extname(file).toLowerCase();
+    if (!VALID_EXTS.has(ext) || GENERATED_SUFFIX_RE.test(file)) continue;
+    const fromPath = path.join(PUB_IMG_DIR, file);
+    const toPath = path.join(RAW_DIR, file);
+    await fs.copyFile(fromPath, toPath);
+    await fs.unlink(fromPath);
+  }
+
+  const rawFiles = await fs.readdir(RAW_DIR);
+  return rawFiles
+    .filter((file) => VALID_EXTS.has(path.extname(file).toLowerCase()))
+    .map((file) => ({
+      slug: path.basename(file, path.extname(file)),
+      rawPath: path.join(RAW_DIR, file),
+    }));
+}
 
 async function run() {
-  await fs.mkdir(RAW_DIR, { recursive: true });
+  const sources = await collectRawSources();
+  if (!sources.length) {
+    console.log('No source images found in assets-raw/ or public/images/.');
+    return;
+  }
 
-  for (const slug of SLUGS) {
-    const rawBackupPath = path.join(RAW_DIR, `${slug}.jpg`);
-    const srcPath = path.join(SRC_DIR, `${slug}.jpg`);
+  for (const { slug, rawPath } of sources) {
+    const pipeline = sharp(rawPath).rotate();
 
-    try {
-      await fs.access(rawBackupPath);
-    } catch {
-      await fs.copyFile(srcPath, rawBackupPath);
-      await fs.unlink(srcPath);
-    }
-
-    const pipeline = sharp(rawBackupPath).rotate();
-
-    await Promise.all([
+    const tasks = [
       pipeline
         .clone()
         .resize({ width: 640, withoutEnlargement: true })
         .avif({ quality: 45, effort: 5 })
-        .toFile(path.join(SRC_DIR, `${slug}-640.avif`)),
+        .toFile(path.join(PUB_IMG_DIR, `${slug}-640.avif`)),
       pipeline
         .clone()
         .resize({ width: 800, withoutEnlargement: true })
         .avif({ quality: 45, effort: 5 })
-        .toFile(path.join(SRC_DIR, `${slug}-800.avif`)),
+        .toFile(path.join(PUB_IMG_DIR, `${slug}-800.avif`)),
       pipeline
         .clone()
         .resize({ width: 1200, withoutEnlargement: true })
         .avif({ quality: 48, effort: 5 })
-        .toFile(path.join(SRC_DIR, `${slug}-1200.avif`)),
+        .toFile(path.join(PUB_IMG_DIR, `${slug}-1200.avif`)),
       pipeline
         .clone()
         .resize({ width: 640, withoutEnlargement: true })
         .webp({ quality: 70 })
-        .toFile(path.join(SRC_DIR, `${slug}-640.webp`)),
+        .toFile(path.join(PUB_IMG_DIR, `${slug}-640.webp`)),
       pipeline
         .clone()
         .resize({ width: 800, withoutEnlargement: true })
         .webp({ quality: 72 })
-        .toFile(path.join(SRC_DIR, `${slug}-800.webp`)),
+        .toFile(path.join(PUB_IMG_DIR, `${slug}-800.webp`)),
       pipeline
         .clone()
         .resize({ width: 1200, withoutEnlargement: true })
         .webp({ quality: 74 })
-        .toFile(path.join(SRC_DIR, `${slug}-1200.webp`)),
+        .toFile(path.join(PUB_IMG_DIR, `${slug}-1200.webp`)),
       pipeline
         .clone()
         .resize({ width: 800, withoutEnlargement: true })
         .jpeg({ quality: 74, mozjpeg: true })
-        .toFile(path.join(SRC_DIR, `${slug}-800.jpg`)),
-    ]);
+        .toFile(path.join(PUB_IMG_DIR, `${slug}-800.jpg`)),
+    ];
 
-    if (slug === 'hero-villa') {
-      await pipeline
-        .clone()
-        .resize({ width: 1200, withoutEnlargement: true })
-        .jpeg({ quality: 78, mozjpeg: true })
-        .toFile(path.join(SRC_DIR, `${slug}-1200.jpg`));
+    if (slug.startsWith('hero-')) {
+      tasks.push(
+        pipeline
+          .clone()
+          .resize({ width: 1200, withoutEnlargement: true })
+          .jpeg({ quality: 78, mozjpeg: true })
+          .toFile(path.join(PUB_IMG_DIR, `${slug}-1200.jpg`)),
+      );
     }
-  }
 
-  const files = (await fs.readdir(SRC_DIR)).sort();
-  for (const file of files) {
-    const stat = await fs.stat(path.join(SRC_DIR, file));
-    console.log(`${file}: ${(stat.size / 1024).toFixed(1)} KB`);
+    await Promise.all(tasks);
+    console.log(`Optimized: ${slug}`);
   }
 }
 

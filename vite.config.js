@@ -1,9 +1,11 @@
 import { defineConfig } from 'vite';
 import {
+  COMING_SOON,
   PROPERTIES,
   NEIGHBORHOODS,
   FAQS,
   SITE_URL,
+  renderComingSoonCardHtml,
   renderPropertyCardHtml,
   renderNeighborhoodCardHtml,
   renderFaqItemHtml,
@@ -20,6 +22,7 @@ function prerenderAndInlineCss() {
       const propertiesHtml = PROPERTIES.map((item) =>
         renderPropertyCardHtml(item, { base: './', isSaved: false }),
       ).join('');
+      const comingSoonHtml = COMING_SOON.map((item) => renderComingSoonCardHtml(item)).join('');
       const neighborhoodsHtml = NEIGHBORHOODS.map((area) =>
         renderNeighborhoodCardHtml(area, { base: './' }),
       ).join('');
@@ -29,6 +32,7 @@ function prerenderAndInlineCss() {
       return html
         .replace('<!--SSR_JSON_LD-->', jsonLdHtml)
         .replace('<!--SSR_PROPERTIES-->', propertiesHtml)
+        .replace('<!--SSR_COMING_SOON-->', comingSoonHtml)
         .replace('<!--SSR_NEIGHBORHOODS-->', neighborhoodsHtml)
         .replace('<!--SSR_FAQS-->', faqsHtml);
     },

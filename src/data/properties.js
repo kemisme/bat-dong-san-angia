@@ -1,211 +1,10 @@
+import listings from './listings.json' with { type: 'json' };
+import comingSoon from './coming-soon.json' with { type: 'json' };
+
 export const SITE_URL = 'https://kemisme.github.io/bat-dong-san-angia/';
 
-export const PROPERTIES = [
-  {
-    id: 'villa-thao-dien-01',
-    title: 'Biệt Thự Ven Sông Thảo Điền Serenity',
-    type: 'Biệt thự',
-    city: 'TP.HCM',
-    district: 'Thảo Điền, TP. Thủ Đức',
-    status: 'Độc quyền',
-    priceBillion: 68.5,
-    pricePerSqm: '195 Triệu/m²',
-    pricePerSqmNum: 195,
-    rentalMonthlyMillion: 185,
-    appreciationPct: 7.5,
-    area: 350,
-    bedrooms: 5,
-    bathrooms: 6,
-    direction: 'Đông Nam',
-    legal: 'Sổ hồng riêng, hoàn công đầy đủ',
-    handover: 'Bàn giao ngay',
-    imageSlug: 'hero-villa',
-    summary:
-      'Biệt thự đơn lập mặt sông Sài Gòn với hồ bơi tràn viền, sân vườn nhiệt đới riêng tư và hệ kính kịch trần đón ánh sáng tự nhiên.',
-    highlights: [
-      'Mặt tiền sông 18m thoáng đãng, bến du thuyền nội khu chỉ cách 120m',
-      'Nội thất nhập khẩu Ý, đá Marble Travertine tự nhiên & gỗ Teak Myanmar',
-      'Hệ thống nhà thông minh KNX, thang máy kính 4 điểm dừng và hầm rượu 400 chai',
-    ],
-    amenities: [
-      { name: 'Trường Quốc tế BIS Thảo Điền', distance: '4 phút di chuyển' },
-      { name: 'Ga Metro Thảo Điền (Tuyến số 1)', distance: '6 phút di chuyển' },
-      { name: 'Bến du thuyền Sông Sài Gòn', distance: '2 phút đi bộ' },
-      { name: 'Bệnh viện Quốc tế AIH', distance: '8 phút di chuyển' },
-    ],
-    paymentPlan: 'Thanh toán 30% nhận nhà ngay, hỗ trợ vay 65% lãi suất ưu đãi 18 tháng.',
-  },
-  {
-    id: 'penthouse-thu-thiem-02',
-    title: 'Sky Penthouse The Horizon Thủ Thiêm',
-    type: 'Penthouse',
-    city: 'TP.HCM',
-    district: 'Khu đô thị Thủ Thiêm, TP. Thủ Đức',
-    status: 'Đang mở bán',
-    priceBillion: 42.0,
-    pricePerSqm: '168 Triệu/m²',
-    pricePerSqmNum: 168,
-    rentalMonthlyMillion: 120,
-    appreciationPct: 8.5,
-    area: 250,
-    bedrooms: 4,
-    bathrooms: 4,
-    direction: 'Tây Nam (View Sông & Bitexco)',
-    legal: 'Sổ hồng sở hữu lâu dài',
-    handover: 'Quý II/2027',
-    imageSlug: 'penthouse-interior',
-    summary:
-      'Không gian sống tầng mây với tầm nhìn 270 độ ôm trọn sông Sài Gòn và trung tâm Quận 1, trần thông tầng cao 6,4m.',
-    highlights: [
-      'Sảnh thang máy riêng biệt với khóa nhận diện sinh trắc học cho từng chủ nhân',
-      'Phòng khách thông tầng kính Low-E cách âm, cách nhiệt chuẩn LEED Gold',
-      'Kèm 2 chỗ đậu xe định danh và gói thành viên Sky Lounge riêng tư',
-    ],
-    amenities: [
-      { name: 'Cầu Ba Son → Trung tâm Quận 1', distance: '3 phút di chuyển' },
-      { name: 'Công viên Bờ sông Thủ Thiêm', distance: '2 phút đi bộ' },
-      { name: 'Trung tâm Tài chính Quốc tế', distance: '4 phút di chuyển' },
-      { name: 'Nhà hát Giao hưởng Thủ Thiêm', distance: '5 phút di chuyển' },
-    ],
-    paymentPlan: 'Ký HĐMB 15%, thanh toán giãn tiến độ 24 tháng đến khi nhận bàn giao.',
-  },
-  {
-    id: 'townhouse-tay-ho-03',
-    title: 'Nhà Phố Thương Mại Boulevard Tây Hồ',
-    type: 'Nhà phố',
-    city: 'Hà Nội',
-    district: 'Tây Hồ Tây, Quận Tây Hồ',
-    status: 'Đang mở bán',
-    priceBillion: 34.8,
-    pricePerSqm: '240 Triệu/m²',
-    pricePerSqmNum: 240,
-    rentalMonthlyMillion: 95,
-    appreciationPct: 7.0,
-    area: 145,
-    bedrooms: 4,
-    bathrooms: 5,
-    direction: 'Nam',
-    legal: 'Sổ đỏ lâu dài từng căn',
-    handover: 'Quý IV/2026',
-    imageSlug: 'townhouse-facade',
-    summary:
-      'Tọa lạc trên đại lộ trung tâm 30m kết nối Hồ Tây và khu ngoại giao đoàn, kiến trúc tân cổ điển kết hợp công năng ở và kinh doanh.',
-    highlights: [
-      'Mặt tiền rộng 7,2m, thiết kế 5 tầng + 1 tum tối ưu khai thác văn phòng hoặc showroom',
-      'Vỉa hè lát đá granite rộng 6m, hai làn đường rợp bóng cây xanh',
-      'Cách công viên Hòa Bình 5 phút di chuyển và tuyến Metro số 2 chỉ 400m',
-    ],
-    amenities: [
-      { name: 'Khu Ngoại giao đoàn & Đại sứ quán', distance: '3 phút di chuyển' },
-      { name: 'Ga Metro tuyến số 2', distance: '5 phút đi bộ' },
-      { name: 'Lotte Mall West Lake Hanoi', distance: '6 phút di chuyển' },
-      { name: 'Trường Quốc tế UNIS Hà Nội', distance: '7 phút di chuyển' },
-    ],
-    paymentPlan: 'Chiết khấu 6% khi thanh toán sớm, ngân hàng bảo lãnh tiến độ 70%.',
-  },
-  {
-    id: 'garden-villa-son-tra-04',
-    title: 'Biệt Thự Vườn Sinh Thái Bán Đảo Sơn Trà',
-    type: 'Biệt thự',
-    city: 'Đà Nẵng',
-    district: 'Quận Sơn Trà',
-    status: 'Sắp bàn giao',
-    priceBillion: 29.5,
-    pricePerSqm: '105 Triệu/m²',
-    pricePerSqmNum: 105,
-    rentalMonthlyMillion: 110,
-    appreciationPct: 8.0,
-    area: 280,
-    bedrooms: 4,
-    bathrooms: 4,
-    direction: 'Đông',
-    legal: 'Sổ hồng lâu dài',
-    handover: 'Quý I/2027',
-    imageSlug: 'garden-villa',
-    summary:
-      'Ốc đảo nghỉ dưỡng giữa thiên nhiên xanh mát chân núi Sơn Trà, thiết kế lam gỗ tự nhiên cùng hồ cá Koi và hiên trà đạo.',
-    highlights: [
-      'Mật độ xây dựng toàn khu chỉ 24%, bao quanh bởi thảm thực vật bản địa',
-      'Cách bãi biển Mỹ Khê 3 phút đi bộ, khai thác cho thuê nghỉ dưỡng đạt 8–10%/năm',
-      'Hệ thống lọc nước trung tâm và năng lượng mặt trời áp mái tích hợp sẵn',
-    ],
-    amenities: [
-      { name: 'Bãi biển Mỹ Khê', distance: '3 phút đi bộ' },
-      { name: 'Khu bảo tồn thiên nhiên Sơn Trà', distance: '6 phút di chuyển' },
-      { name: 'Cầu Rồng & Trung tâm Đà Nẵng', distance: '8 phút di chuyển' },
-      { name: 'Sân bay Quốc tế Đà Nẵng', distance: '14 phút di chuyển' },
-    ],
-    paymentPlan: 'Thanh toán 25% đến khi nhận nhà, miễn phí quản lý 3 năm đầu tiên.',
-  },
-  {
-    id: 'condo-marina-05',
-    title: 'Căn Hộ Ven Sông Lumina Marina Residences',
-    type: 'Căn hộ',
-    city: 'TP.HCM',
-    district: 'Phú Mỹ Hưng, Quận 7',
-    status: 'Đang mở bán',
-    priceBillion: 9.8,
-    pricePerSqm: '92 Triệu/m²',
-    pricePerSqmNum: 92,
-    rentalMonthlyMillion: 38,
-    appreciationPct: 6.5,
-    area: 106,
-    bedrooms: 3,
-    bathrooms: 2,
-    direction: 'Đông Bắc',
-    legal: 'Sổ hồng riêng',
-    handover: 'Bàn giao ngay',
-    imageSlug: 'waterfront-tower',
-    summary:
-      'Căn hộ góc 3 phòng ngủ hướng công viên ven sông với đường dạo bộ gỗ dài 1,2km, tiện ích resort 5 sao ngay thềm nhà.',
-    highlights: [
-      'Ban công kính rộng 12m² đón gió sông quanh năm, bếp đóng tách biệt hiện đại',
-      'Hệ thống 38 tiện ích: hồ bơi muối khoáng, phòng gym Technogym, vườn chân mây',
-      'Liền kề hệ thống trường quốc tế Canada, SSIS và trung tâm thương mại Crescent Mall',
-    ],
-    amenities: [
-      { name: 'Trường Quốc tế Canada & SSIS', distance: '4 phút di chuyển' },
-      { name: 'TTTM Crescent Mall & Hồ Bán Nguyệt', distance: '5 phút di chuyển' },
-      { name: 'Bệnh viện Pháp Việt (FV)', distance: '6 phút di chuyển' },
-      { name: 'Công viên ven sông 1,2km', distance: '1 phút đi bộ' },
-    ],
-    paymentPlan: 'Hỗ trợ lãi suất 0% trong 24 tháng, nhận nhà vào ở hoặc cho thuê ngay.',
-  },
-  {
-    id: 'penthouse-ho-tay-06',
-    title: 'Duplex Garden Hồ Tây Heritage',
-    type: 'Penthouse',
-    city: 'Hà Nội',
-    district: 'Quảng An, Quận Tây Hồ',
-    status: 'Độc quyền',
-    priceBillion: 38.2,
-    pricePerSqm: '182 Triệu/m²',
-    pricePerSqmNum: 182,
-    rentalMonthlyMillion: 115,
-    appreciationPct: 7.5,
-    area: 210,
-    bedrooms: 3,
-    bathrooms: 4,
-    direction: 'Đông Nam (View Hồ Tây)',
-    legal: 'Sổ hồng vĩnh viễn',
-    handover: 'Bàn giao ngay',
-    imageSlug: 'penthouse-interior',
-    summary:
-      'Duplex thông tầng hiếm có tại bán đảo Quảng An với sân vườn trên cao 45m² và tầm nhìn trực diện mặt nước Hồ Tây.',
-    highlights: [
-      'Cộng đồng cư dân tinh hoa chỉ 48 căn hộ giới hạn trên toàn dự án',
-      'Trang bị hệ thống sưởi sàn mùa đông và điều hòa âm trần Daikin VRV',
-      'Dịch vụ Concierge chuẩn khách sạn 5 sao phục vụ 24/7',
-    ],
-    amenities: [
-      { name: 'Mặt nước & Đường dạo Hồ Tây', distance: '1 phút đi bộ' },
-      { name: 'Phủ Tây Hồ & Công viên Nước', distance: '4 phút di chuyển' },
-      { name: 'Khu ẩm thực quốc tế Xuân Diệu', distance: '2 phút di chuyển' },
-      { name: 'Hồ Hoàn Kiếm & Nhà hát Lớn', distance: '12 phút di chuyển' },
-    ],
-    paymentPlan: 'Bàn giao hoàn thiện nội thất cao cấp, công chứng sang tên trong 15 ngày.',
-  },
-];
+export const PROPERTIES = listings;
+export const COMING_SOON = comingSoon;
 
 export const NEIGHBORHOODS = [
   {
@@ -242,13 +41,13 @@ export const FAQS = [
     id: 'faq-legal',
     question: 'Pháp lý các dự án tại AnGia Nhà Đất được kiểm tra như thế nào trước khi giao dịch?',
     answer:
-      'Mọi bất động sản trong danh mục phân phối đều được đội ngũ pháp chế thẩm định đầy đủ hồ sơ trước khi giới thiệu: giấy chứng nhận quyền sử dụng đất (sổ hồng/sổ đỏ), quy hoạch 1/500, giấy phép xây dựng, văn bản nghiệm thu hoàn công và xác nhận không tranh chấp thế chấp.',
+      'Mọi bất động sản trong danh mục phân phối đều được kiểm tra đầy đủ hồ sơ trước khi giới thiệu: giấy chứng nhận quyền sử dụng đất (sổ hồng/sổ đỏ), quy hoạch 1/500, giấy phép xây dựng, văn bản nghiệm thu hoàn công và xác nhận không tranh chấp thế chấp.',
   },
   {
     id: 'faq-loan',
     question: 'Khách hàng được hỗ trợ vay ngân hàng tối đa bao nhiêu phần trăm giá trị căn nhà?',
     answer:
-      'Đối với các bất động sản đã có sổ hồng hoặc dự án có ngân hàng bảo lãnh, khách hàng có thể vay tối đa 65% đến 70% giá trị tài sản với thời hạn lên đến 35 năm. AnGia Nhà Đất liên kết trực tiếp các ngân hàng lớn để áp dụng gói ân hạn gốc và lãi suất ưu đãi 12–24 tháng đầu.',
+      'Đối với các bất động sản đã có sổ hồng hoặc dự án có ngân hàng bảo lãnh, khách hàng có thể vay tối đa 65% đến 70% giá trị tài sản với thời hạn lên đến 35 năm, kèm các gói ân hạn gốc và lãi suất ưu đãi 12–24 tháng đầu.',
   },
   {
     id: 'faq-fees',
@@ -258,9 +57,9 @@ export const FAQS = [
   },
   {
     id: 'faq-tour',
-    question: 'Quy trình đặt lịch xem thực tế và nhận bảng tính dòng tiền diễn ra ra sao?',
+    question: 'Quy trình liên hệ bán hàng và đặt lịch xem nhà thực tế diễn ra ra sao?',
     answer:
-      'Sau khi bạn gửi thông tin qua biểu mẫu đặt lịch hoặc chọn căn muốn xem, chuyên viên phụ trách khu vực sẽ liên hệ trong 15 phút làm việc để gửi hồ sơ mặt bằng, bảng giá chi tiết, phương án vay ngân hàng và sắp xếp lịch tham quan thực tế 1:1 theo khung giờ bạn mong muốn.',
+      'Sau khi bạn gửi thông tin qua mục Liên hệ bán hàng hoặc chọn căn muốn xem, bộ phận kinh doanh trực tiếp sẽ liên hệ trong 15 phút làm việc để gửi hồ sơ mặt bằng, bảng giá chi tiết, phương án vay ngân hàng và sắp xếp lịch tham quan thực tế 1:1.',
   },
   {
     id: 'faq-foreign',
@@ -283,6 +82,13 @@ export function defaultSlugForType(type) {
     default:
       return 'townhouse-facade';
   }
+}
+
+export function formatPriceBillion(priceBillion, suffix = 'Tỷ') {
+  if (priceBillion == null || Number(priceBillion) <= 0) return 'Giá liên hệ';
+  const num = Number(priceBillion);
+  const formatted = Math.abs(num * 10 - Math.round(num * 10)) < 1e-6 ? num.toFixed(1) : Number(num.toFixed(2)).toString();
+  return `${formatted.replace('.', ',')} ${suffix}`;
 }
 
 export function escapeHtml(value) {
@@ -318,31 +124,48 @@ export function renderPictureHtml({
 
 export function renderPropertyCardHtml(item, { base = './', isSaved = false, isCompared = false } = {}) {
   const safeTitle = escapeHtml(item.title);
-  const mediaHtml = item.customImage
-    ? `<img src="${escapeHtml(item.customImage)}" alt="${safeTitle} tại ${escapeHtml(item.district)}" width="640" height="400" loading="lazy" decoding="async" />`
-    : renderPictureHtml({
-        slug: item.imageSlug || defaultSlugForType(item.type),
-        alt: `${item.title} tại ${item.district}`,
-        width: 640,
-        height: 400,
-        sizes: '(max-width: 720px) 100vw, (max-width: 1120px) 50vw, 390px',
-        base,
-        loading: 'lazy',
-      });
+  const mediaHtml = renderPictureHtml({
+    slug: item.imageSlug || defaultSlugForType(item.type),
+    alt: `${item.title} tại ${item.district}`,
+    width: 640,
+    height: 400,
+    sizes: '(max-width: 720px) 100vw, (max-width: 1120px) 50vw, 390px',
+    base,
+    loading: 'lazy',
+  });
 
-  const statusBadgeClass = item.isUserListing ? 'badge badge-user' : 'badge badge-accent';
-  const deleteBtnHtml = item.isUserListing
-    ? `<button type="button" class="btn btn-danger-outline btn-sm" data-delete-id="${item.id}" aria-label="Xóa tin ${safeTitle}">Xóa tin</button>`
-    : '';
+  const isLand = item.type === 'Đất nền' || item.bedrooms === 0;
+  const specsHtml = isLand
+    ? `<li>${item.area} m²</li>
+       <li>${escapeHtml(item.dimensions || 'Đất thổ cư')}</li>
+       <li>${escapeHtml(item.handover)}</li>`
+    : `<li>${item.area} m²</li>
+       <li>${item.bedrooms} PN</li>
+       <li>${item.bathrooms} PT</li>
+       <li>${escapeHtml(item.handover)}</li>`;
+
+  const photoCount = item.gallery?.length || 1;
+  const photoBadgeHtml =
+    photoCount > 1
+      ? `<span class="card-photo-count" aria-label="${photoCount} hình ảnh thực tế">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <circle cx="8.5" cy="10.5" r="1.5" />
+            <path d="M21 15l-5-5L5 19" />
+          </svg>
+          ${photoCount} ảnh
+        </span>`
+      : '';
 
   return `
     <article class="property-card-wrap" data-property-id="${item.id}">
-      <div class="card-media">
+      <div class="card-media" data-open-id="${item.id}">
         ${mediaHtml}
         <div class="card-badges">
           <span class="badge">${escapeHtml(item.type)}</span>
-          <span class="${statusBadgeClass}">${escapeHtml(item.status)}</span>
+          <span class="badge badge-accent">${escapeHtml(item.status)}</span>
         </div>
+        ${photoBadgeHtml}
         <button
           type="button"
           class="save-btn"
@@ -364,20 +187,16 @@ export function renderPropertyCardHtml(item, { base = './', isSaved = false, isC
       <div class="card-body">
         <p class="card-summary">${escapeHtml(item.summary)}</p>
         <ul class="card-specs">
-          <li>${item.area} m²</li>
-          <li>${item.bedrooms} PN</li>
-          <li>${item.bathrooms} PT</li>
-          <li>${escapeHtml(item.handover)}</li>
+          ${specsHtml}
         </ul>
       </div>
 
       <footer class="card-footer">
         <div class="card-price">
-          <strong>${Number(item.priceBillion).toFixed(1).replace('.', ',')} Tỷ</strong>
+          <strong>${formatPriceBillion(item.priceBillion)}</strong>
           <span>${escapeHtml(item.pricePerSqm)}</span>
         </div>
         <div class="card-actions">
-          ${deleteBtnHtml}
           <button
             type="button"
             class="btn btn-outline btn-sm compare-toggle-btn"
@@ -420,6 +239,54 @@ export function renderNeighborhoodCardHtml(area, { base = './' } = {}) {
   `;
 }
 
+export function renderComingSoonCardHtml(item) {
+  const phoneRaw = String(item.contactPhone || '0961589925').replace(/\s+/g, '');
+  const phoneDisplay = phoneRaw.replace(/^(\d{4})(\d{3})(\d{3})$/, '$1 $2 $3');
+  const safeTitle = escapeHtml(item.title);
+
+  return `
+    <article class="coming-soon-card" data-coming-soon-id="${escapeHtml(item.id)}">
+      <div class="coming-soon-card-top">
+        <span class="coming-soon-badge">
+          <span class="coming-soon-dot" aria-hidden="true"></span>
+          ${escapeHtml(item.badge || 'COMING SOON')}
+        </span>
+        <span class="coming-soon-eta">${escapeHtml(item.launchEta || 'Sắp mở bán')}</span>
+      </div>
+
+      <h3 class="coming-soon-title">${safeTitle}</h3>
+      <p class="coming-soon-location">${escapeHtml(item.location)}</p>
+
+      <dl class="coming-soon-facts">
+        <div>
+          <dt>Thông tin nhanh</dt>
+          <dd>${escapeHtml(item.specs)}</dd>
+        </div>
+        <div>
+          <dt>Giá mua sớm</dt>
+          <dd class="coming-soon-price">${escapeHtml(item.priceNote)}</dd>
+        </div>
+      </dl>
+
+      <p class="coming-soon-note">${escapeHtml(item.note)}</p>
+
+      <footer class="coming-soon-actions">
+        <button type="button" class="btn btn-accent btn-sm" data-coming-soon-title="${safeTitle}">
+          Liên hệ mua sớm giá hời
+        </button>
+        <a
+          href="https://zalo.me/${escapeHtml(phoneRaw)}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-coming-soon-ghost btn-sm"
+        >
+          Zalo chốt giá: ${escapeHtml(phoneDisplay)}
+        </a>
+      </footer>
+    </article>
+  `;
+}
+
 export function renderFaqItemHtml(faq, index) {
   const panelId = `faq-panel-${index + 1}`;
   return `
@@ -449,13 +316,13 @@ export function buildJsonLd(siteUrl = SITE_URL) {
         logo: `${siteUrl}favicon.svg`,
         image: `${siteUrl}images/hero-villa-1200.jpg`,
         description:
-          'Cổng tìm kiếm, mua bán và đăng tin bất động sản thân thiện tại TP.HCM, Hà Nội, Đà Nẵng với pháp lý minh bạch.',
-        telephone: '+84-1900-6868',
-        areaServed: ['TP. Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng'],
+          'Kênh giới thiệu, mua bán đất nền và nhà phố chính chủ tại Hóc Môn, sát Quận 12, TP.HCM với pháp lý minh bạch, liên hệ trực tiếp 0961 589 925.',
+        telephone: '+84-961-589-925',
+        areaServed: ['Hóc Môn', 'Quận 12', 'TP. Hồ Chí Minh'],
         address: {
           '@type': 'PostalAddress',
-          streetAddress: '88 Song Hành, Thảo Điền',
-          addressLocality: 'TP. Thủ Đức',
+          streetAddress: 'Đông Thạnh – Tân Xuân',
+          addressLocality: 'Hóc Môn',
           addressRegion: 'TP. Hồ Chí Minh',
           addressCountry: 'VN',
         },
@@ -464,14 +331,14 @@ export function buildJsonLd(siteUrl = SITE_URL) {
         '@type': 'WebSite',
         '@id': `${siteUrl}#website`,
         url: siteUrl,
-        name: 'AnGia Nhà Đất — Mua Bán & Đăng Tin Bất Động Sản',
+        name: 'Nhà Đất Hóc Môn Chính Chủ — AnGia Nhà Đất (K)',
         inLanguage: 'vi-VN',
         publisher: { '@id': `${siteUrl}#organization` },
       },
       {
         '@type': 'ItemList',
         '@id': `${siteUrl}#listings`,
-        name: 'Danh mục bất động sản nổi bật AnGia Nhà Đất',
+        name: 'Danh mục nhà đất chính chủ Hóc Môn — AnGia Nhà Đất',
         numberOfItems: PROPERTIES.length,
         itemListElement: PROPERTIES.map((item, idx) => ({
           '@type': 'ListItem',
@@ -481,10 +348,12 @@ export function buildJsonLd(siteUrl = SITE_URL) {
             name: item.title,
             description: item.summary,
             url: `${siteUrl}?du-an=${item.id}`,
-            image: `${siteUrl}images/${item.imageSlug}-1200.jpg`,
+            image: `${siteUrl}images/${item.imageSlug}-800.jpg`,
             offers: {
               '@type': 'Offer',
-              price: Math.round(item.priceBillion * 1_000_000_000),
+              ...(item.priceBillion != null && Number(item.priceBillion) > 0
+                ? { price: Math.round(item.priceBillion * 1_000_000_000) }
+                : {}),
               priceCurrency: 'VND',
               availability: 'https://schema.org/InStock',
             },
