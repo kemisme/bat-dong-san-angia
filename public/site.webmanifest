@@ -1,10 +1,10 @@
 {
-  "name": "AnGia Premier — Bất Động Sản Hạng Sang",
-  "short_name": "AnGia Premier",
+  "name": "AnGia Nhà Đất — Mua Bán & Đăng Tin Bất Động Sản",
+  "short_name": "AnGia Nhà Đất",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#f8f6f2",
-  "theme_color": "#142b26",
+  "background_color": "#f4f7fb",
+  "theme_color": "#0b5ed7",
   "icons": [
     {
       "src": "./favicon.svg",

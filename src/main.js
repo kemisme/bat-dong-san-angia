@@ -3,6 +3,7 @@ import {
   PROPERTIES,
   NEIGHBORHOODS,
   SITE_URL,
+  defaultSlugForType,
   escapeHtml,
   renderPictureHtml,
   renderPropertyCardHtml,
@@ -20,7 +21,17 @@ if (!Object.hasOwn(HTMLElement.prototype, 'focusGroup')) {
 const base = import.meta.env.BASE_URL;
 const STORAGE_KEY = 'angia-saved-properties';
 const COMPARE_KEY = 'angia-compare-properties';
+const USER_LISTINGS_KEY = 'angia-user-listings';
 const MAX_COMPARE = 3;
+
+function loadUserListings() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(USER_LISTINGS_KEY) || '[]');
+    return Array.isArray(raw) ? raw : [];
+  } catch {
+    return [];
+  }
+}
 
 const state = {
   keyword: '',
@@ -29,11 +40,18 @@ const state = {
   budget: 'all',
   sort: 'featured',
   onlySaved: false,
+  onlyMyPosts: false,
+  userListings: loadUserListings(),
   savedIds: new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')),
-  compareIds: JSON.parse(localStorage.getItem(COMPARE_KEY) || '[]').filter((id) =>
-    PROPERTIES.some((p) => p.id === id),
-  ),
+  compareIds: JSON.parse(localStorage.getItem(COMPARE_KEY) || '[]'),
 };
+
+function getAllProperties() {
+  return [...state.userListings, ...PROPERTIES];
+}
+
+// Clean stale compare IDs against loaded properties
+state.compareIds = state.compareIds.filter((id) => getAllProperties().some((p) => p.id === id));
 
 const els = {
   header: document.getElementById('site-header'),
@@ -44,7 +62,10 @@ const els = {
   neighborhoodGrid: document.getElementById('neighborhood-grid'),
   resultsSummary: document.getElementById('results-summary'),
   savedCount: document.getElementById('saved-count'),
+  myPostsCount: document.getElementById('my-posts-count'),
   toggleSavedBtn: document.getElementById('toggle-saved-btn'),
+  toggleMyPostsBtn: document.getElementById('toggle-my-posts-btn'),
+  openPostBtn: document.getElementById('open-post-btn'),
   heroSearchForm: document.getElementById('hero-search-form'),
   searchKeyword: document.getElementById('search-keyword'),
   searchCity: document.getElementById('search-city'),
@@ -54,6 +75,14 @@ const els = {
   filterPills: document.querySelectorAll('.pill[data-filter-type]'),
   dialog: document.getElementById('property-dialog'),
   dialogContent: document.getElementById('dialog-content'),
+  postDialog: document.getElementById('post-dialog'),
+  postForm: document.getElementById('post-listing-form'),
+  postImageInput: document.getElementById('post-image'),
+  postImagePreview: document.getElementById('post-image-preview'),
+  postImagePreviewImg: document.getElementById('post-image-preview-img'),
+  postImageClear: document.getElementById('post-image-clear'),
+  postCancelBtn: document.getElementById('post-cancel-btn'),
+  postQuotaError: document.getElementById('post-quota-error'),
   compareTray: document.getElementById('compare-tray'),
   compareCount: document.getElementById('compare-count'),
   compareChips: document.getElementById('compare-chips'),
@@ -155,7 +184,6 @@ function announceToast(message) {
 }
 
 function showToast(message) {
-  // Never surface background toasts while a modal dialog is open
   if (document.querySelector('dialog[open]') || !els.toastRegion) return;
 
   if (activeToastEl) {
@@ -236,9 +264,11 @@ function showToast(message) {
 /* ---------- Property Catalog & Filtering ---------- */
 function getFilteredProperties() {
   const keyword = state.keyword.trim().toLowerCase();
+  const all = getAllProperties();
 
-  let list = PROPERTIES.filter((item) => {
+  let list = all.filter((item) => {
     if (state.onlySaved && !state.savedIds.has(item.id)) return false;
+    if (state.onlyMyPosts && !item.isUserListing) return false;
     if (state.city !== 'all' && item.city !== state.city) return false;
     if (state.type !== 'all' && item.type !== state.type) return false;
     if (state.budget !== 'all' && item.priceBillion > Number(state.budget)) return false;
@@ -265,11 +295,30 @@ function updateSavedCounter() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify([...state.savedIds]));
 }
 
+function updateMyPostsCounter() {
+  if (els.myPostsCount) {
+    els.myPostsCount.textContent = String(state.userListings.length);
+  }
+}
+
+function syncLeadPropertyOptions() {
+  if (!els.leadPropertySelect) return;
+  els.leadPropertySelect.innerHTML = '<option value="Tư vấn danh mục phù hợp">Tư vấn danh mục phù hợp</option>';
+  getAllProperties().forEach((item) => {
+    const option = document.createElement('option');
+    option.value = item.title;
+    option.textContent = `${item.title} (${Number(item.priceBillion).toFixed(1).replace('.', ',')} Tỷ)`;
+    els.leadPropertySelect.append(option);
+  });
+}
+
 function syncCardButtonsInPlace() {
+  const all = getAllProperties();
   const compareSet = new Set(state.compareIds);
+
   els.propertyGrid.querySelectorAll('[data-save-id]').forEach((btn) => {
     const id = btn.dataset.saveId;
-    const item = PROPERTIES.find((p) => p.id === id);
+    const item = all.find((p) => p.id === id);
     const isSaved = state.savedIds.has(id);
     btn.setAttribute('aria-pressed', isSaved ? 'true' : 'false');
     if (item) {
@@ -287,19 +336,31 @@ function renderProperties() {
   const items = getFilteredProperties();
   const compareSet = new Set(state.compareIds);
 
-  els.resultsSummary.textContent = state.onlySaved
-    ? `Đang xem ${items.length} bất động sản đã lưu`
-    : `Đang hiển thị ${items.length} bất động sản phù hợp`;
+  if (state.onlySaved) {
+    els.resultsSummary.textContent = `Đang xem ${items.length} bất động sản đã lưu`;
+  } else if (state.onlyMyPosts) {
+    els.resultsSummary.textContent = `Đang xem ${items.length} tin bất động sản bạn đã đăng`;
+  } else {
+    els.resultsSummary.textContent = `Đang hiển thị ${items.length} bất động sản phù hợp`;
+  }
 
   if (!items.length) {
     els.propertyGrid.innerHTML = `
       <div class="empty-state">
-        <h3>Không tìm thấy bất động sản khớp bộ lọc</h3>
-        <p>Hãy thử mở rộng khoảng giá hoặc đặt lại bộ lọc để xem toàn bộ danh mục.</p>
-        <button type="button" class="btn btn-primary" id="clear-filters-btn">Xem tất cả dự án</button>
+        <h3>${state.onlyMyPosts ? 'Bạn chưa đăng tin nào' : 'Không tìm thấy bất động sản khớp bộ lọc'}</h3>
+        <p>${
+          state.onlyMyPosts
+            ? 'Bấm "+ Đăng tin" ở góc trên để tạo tin rao bất động sản đầu tiên của bạn.'
+            : 'Hãy thử mở rộng khoảng giá hoặc đặt lại bộ lọc để xem toàn bộ danh mục.'
+        }</p>
+        <div class="card-actions" style="justify-content:center; margin-top: 1rem;">
+          <button type="button" class="btn btn-primary" id="clear-filters-btn">Xem tất cả nhà đất</button>
+          ${state.onlyMyPosts ? '<button type="button" class="btn btn-accent" id="empty-post-btn">+ Đăng tin ngay</button>' : ''}
+        </div>
       </div>
     `;
     document.getElementById('clear-filters-btn')?.addEventListener('click', resetFilters);
+    document.getElementById('empty-post-btn')?.addEventListener('click', openPostDialog);
     return;
   }
 
@@ -320,18 +381,20 @@ function resetFilters() {
   state.type = 'all';
   state.budget = 'all';
   state.onlySaved = false;
+  state.onlyMyPosts = false;
   els.searchKeyword.value = '';
   els.searchCity.value = 'all';
   els.searchType.value = 'all';
   els.searchBudget.value = 'all';
   els.toggleSavedBtn.setAttribute('aria-pressed', 'false');
+  els.toggleMyPostsBtn?.setAttribute('aria-pressed', 'false');
   syncFilterPills();
   renderProperties();
 }
 
 function syncFilterPills() {
   els.filterPills.forEach((pill) => {
-    pill.classList.toggle('is-active', pill.dataset.filterType === state.type);
+    pill.classList.toggle('is-active', !state.onlyMyPosts && pill.dataset.filterType === state.type);
   });
 }
 
@@ -342,6 +405,189 @@ function ensureNeighborhoodsRendered() {
   ).join('');
 }
 
+/* ---------- Post New Listing ("Đăng tin") ---------- */
+let uploadedImageDataUrl = '';
+
+async function compressImageFile(file) {
+  const maxWidth = 800;
+  if (typeof createImageBitmap === 'function') {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, maxWidth / bitmap.width);
+    const width = Math.max(1, Math.round(bitmap.width * scale));
+    const height = Math.max(1, Math.round(bitmap.height * scale));
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(bitmap, 0, 0, width, height);
+    bitmap.close?.();
+    return canvas.toDataURL('image/jpeg', 0.78);
+  }
+
+  return await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function clearUploadedImage() {
+  uploadedImageDataUrl = '';
+  if (els.postImageInput) els.postImageInput.value = '';
+  if (els.postImagePreview) els.postImagePreview.hidden = true;
+  if (els.postImagePreviewImg) els.postImagePreviewImg.src = '';
+}
+
+function openPostDialog() {
+  if (!els.postDialog) return;
+  if (els.postQuotaError) els.postQuotaError.textContent = '';
+  els.postDialog.showModal();
+}
+
+function saveUserListingsToStorage(listings) {
+  localStorage.setItem(USER_LISTINGS_KEY, JSON.stringify(listings));
+}
+
+function deleteUserListing(id) {
+  const target = state.userListings.find((item) => item.id === id);
+  if (!target) return;
+
+  state.userListings = state.userListings.filter((item) => item.id !== id);
+  state.savedIds.delete(id);
+  state.compareIds = state.compareIds.filter((cid) => cid !== id);
+
+  saveUserListingsToStorage(state.userListings);
+  updateSavedCounter();
+  saveCompareState();
+  updateMyPostsCounter();
+  syncLeadPropertyOptions();
+  renderCompareTray();
+  renderProperties();
+
+  if (els.dialog?.open) {
+    els.dialog.close('deleted');
+  }
+  showToast(`Đã xóa tin "${target.title}".`);
+}
+
+function setupPostListing() {
+  if (!els.postDialog || !els.postForm) return;
+
+  setupModalDialog(els.postDialog);
+  setupFormValidation(els.postForm);
+
+  els.openPostBtn?.addEventListener('click', openPostDialog);
+  document.querySelectorAll('[data-open-post]').forEach((btn) => {
+    btn.addEventListener('click', openPostDialog);
+  });
+
+  els.postCancelBtn?.addEventListener('click', () => {
+    els.postDialog.close('cancel');
+  });
+
+  els.postImageInput?.addEventListener('change', async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      clearUploadedImage();
+      return;
+    }
+    try {
+      uploadedImageDataUrl = await compressImageFile(file);
+      els.postImagePreviewImg.src = uploadedImageDataUrl;
+      els.postImagePreview.hidden = false;
+    } catch {
+      clearUploadedImage();
+    }
+  });
+
+  els.postImageClear?.addEventListener('click', clearUploadedImage);
+
+  els.postForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!els.postForm.checkValidity()) {
+      els.postForm.querySelector(':invalid')?.focus();
+      return;
+    }
+
+    const data = new FormData(els.postForm);
+    const title = String(data.get('title')).trim();
+    const type = String(data.get('type'));
+    const city = String(data.get('city'));
+    const district = String(data.get('district')).trim();
+    const priceBillion = Number(data.get('priceBillion'));
+    const area = Number(data.get('area'));
+    const bedrooms = Number(data.get('bedrooms') || 0);
+    const bathrooms = Number(data.get('bathrooms') || 0);
+    const legal = String(data.get('legal'));
+    const contactPhone = String(data.get('phone')).trim();
+    const summary = String(data.get('summary')).trim();
+
+    const sqmMillion = Math.max(1, Math.round((priceBillion * 1000) / area));
+    const estimatedRent = Math.max(8, Math.round((priceBillion * 1000 * 0.04) / 12));
+
+    const newListing = {
+      id: `user-${Date.now()}`,
+      isUserListing: true,
+      title,
+      type,
+      city,
+      district,
+      status: 'Tin bạn đăng',
+      priceBillion,
+      pricePerSqm: `${sqmMillion} Triệu/m²`,
+      pricePerSqmNum: sqmMillion,
+      rentalMonthlyMillion: estimatedRent,
+      appreciationPct: 7.0,
+      area,
+      bedrooms,
+      bathrooms,
+      direction: 'Đang cập nhật',
+      legal,
+      handover: 'Liên hệ chính chủ',
+      contactPhone,
+      imageSlug: defaultSlugForType(type),
+      customImage: uploadedImageDataUrl || '',
+      summary,
+      highlights: [
+        `Tin đăng trực tiếp tại ${district}, ${city}`,
+        `Pháp lý: ${legal} — Liên hệ SĐT: ${contactPhone}`,
+        `Đơn giá tham chiếu khoảng ${sqmMillion} Triệu/m²`,
+      ],
+      amenities: [
+        { name: 'Khu vực trung tâm', distance: district },
+        { name: 'Liên hệ chính chủ', distance: contactPhone },
+        { name: 'Pháp lý công chứng', distance: legal },
+        { name: 'Hỗ trợ xem nhà', distance: 'Theo lịch hẹn' },
+      ],
+      paymentPlan: `Thỏa thuận trực tiếp chính chủ qua SĐT ${contactPhone}.`,
+    };
+
+    const nextListings = [newListing, ...state.userListings];
+    try {
+      saveUserListingsToStorage(nextListings);
+    } catch {
+      if (els.postQuotaError) {
+        els.postQuotaError.textContent =
+          'Bộ nhớ trình duyệt đã đầy dung lượng ảnh. Hãy bấm "Bỏ ảnh đã chọn" hoặc xóa bớt tin cũ rồi thử lại.';
+      }
+      return;
+    }
+
+    state.userListings = nextListings;
+    els.postForm.reset();
+    clearUploadedImage();
+    if (els.postQuotaError) els.postQuotaError.textContent = '';
+
+    updateMyPostsCounter();
+    syncLeadPropertyOptions();
+    resetFilters();
+    els.postDialog.close('published');
+    document.getElementById('listings')?.scrollIntoView({ behavior: 'smooth' });
+    showToast(`Đã đăng tin "${title}" lên danh sách!`);
+  });
+}
+
 /* ---------- Side-by-Side Comparison & Responsive Table ---------- */
 function saveCompareState() {
   localStorage.setItem(COMPARE_KEY, JSON.stringify(state.compareIds));
@@ -349,9 +595,8 @@ function saveCompareState() {
 
 function renderCompareTray() {
   if (!els.compareTray) return;
-  const items = state.compareIds
-    .map((id) => PROPERTIES.find((p) => p.id === id))
-    .filter(Boolean);
+  const all = getAllProperties();
+  const items = state.compareIds.map((id) => all.find((p) => p.id === id)).filter(Boolean);
 
   els.compareCount.textContent = String(items.length);
   els.compareTray.hidden = items.length === 0;
@@ -376,7 +621,7 @@ function renderCompareTray() {
 }
 
 function toggleCompareProperty(id) {
-  const item = PROPERTIES.find((p) => p.id === id);
+  const item = getAllProperties().find((p) => p.id === id);
   if (!item) return;
 
   const idx = state.compareIds.indexOf(id);
@@ -397,9 +642,8 @@ function toggleCompareProperty(id) {
 }
 
 function openCompareDialog() {
-  const items = state.compareIds
-    .map((id) => PROPERTIES.find((p) => p.id === id))
-    .filter(Boolean);
+  const all = getAllProperties();
+  const items = state.compareIds.map((id) => all.find((p) => p.id === id)).filter(Boolean);
   if (items.length < 2) {
     showToast('Vui lòng chọn ít nhất 2 bất động sản để so sánh.');
     return;
@@ -422,7 +666,7 @@ function openCompareDialog() {
     },
     {
       label: 'Giá bán niêm yết',
-      render: (p) => `<strong>${p.priceBillion.toFixed(1).replace('.', ',')} Tỷ VNĐ</strong>`,
+      render: (p) => `<strong>${Number(p.priceBillion).toFixed(1).replace('.', ',')} Tỷ VNĐ</strong>`,
     },
     {
       label: 'Đơn giá / m²',
@@ -557,7 +801,6 @@ function setupCalculatorTabs() {
     });
   });
 
-  // Keyboard fallback before/if focusgroup polyfill is inactive
   tablist.addEventListener('keydown', (e) => {
     const idx = tabs.indexOf(document.activeElement);
     if (idx === -1) return;
@@ -573,7 +816,6 @@ function setupCalculatorTabs() {
     }
   });
 
-  // Reveal matching tab when browser Find-in-Page hits hidden="until-found"
   panels.forEach((panel) => {
     panel.addEventListener('beforematch', () => {
       const targetTab = document.getElementById(panel.getAttribute('aria-labelledby'));
@@ -630,21 +872,21 @@ function setupModalDialog(dialog, onClose) {
 
 function syncProjectUrlParam(propertyId) {
   const url = new URL(window.location.href);
-  if (propertyId) url.searchParams.set('du-an', propertyId);
+  if (propertyId && !propertyId.startsWith('user-')) url.searchParams.set('du-an', propertyId);
   else url.searchParams.delete('du-an');
   window.history.replaceState({}, '', url);
 }
 
 function openPropertyDialog(propertyId) {
-  const item = PROPERTIES.find((p) => p.id === propertyId);
+  const item = getAllProperties().find((p) => p.id === propertyId);
   if (!item) return;
 
   syncProjectUrlParam(item.id);
 
-  els.dialogContent.innerHTML = `
-    <div class="dialog-hero">
-      ${renderPictureHtml({
-        slug: item.imageSlug,
+  const heroMediaHtml = item.customImage
+    ? `<img src="${escapeHtml(item.customImage)}" alt="${escapeHtml(item.title)}" width="880" height="440" fetchpriority="low" loading="lazy" />`
+    : renderPictureHtml({
+        slug: item.imageSlug || defaultSlugForType(item.type),
         alt: item.title,
         width: 880,
         height: 440,
@@ -652,7 +894,19 @@ function openPropertyDialog(propertyId) {
         base,
         loading: 'lazy',
         fetchpriority: 'low',
-      })}
+      });
+
+  const deleteActionHtml = item.isUserListing
+    ? `<button type="button" class="btn btn-danger-outline" id="dialog-delete-btn">Xóa tin này</button>`
+    : '';
+
+  const contactLineHtml = item.contactPhone
+    ? `<p><strong>Liên hệ chính chủ:</strong> <a href="tel:${escapeHtml(item.contactPhone)}">${escapeHtml(item.contactPhone)}</a></p>`
+    : '';
+
+  els.dialogContent.innerHTML = `
+    <div class="dialog-hero">
+      ${heroMediaHtml}
       <form method="dialog">
         <button type="submit" class="dialog-close" value="close" aria-label="Đóng hộp thoại chi tiết">✕</button>
       </form>
@@ -664,12 +918,13 @@ function openPropertyDialog(propertyId) {
           <h1 id="dialog-title">${escapeHtml(item.title)}</h1>
         </div>
         <div class="dialog-price">
-          <strong>${item.priceBillion.toFixed(1).replace('.', ',')} Tỷ VNĐ</strong>
+          <strong>${Number(item.priceBillion).toFixed(1).replace('.', ',')} Tỷ VNĐ</strong>
           <span>${escapeHtml(item.pricePerSqm)}</span>
         </div>
       </div>
 
       <p>${escapeHtml(item.summary)}</p>
+      ${contactLineHtml}
 
       <div class="dialog-specs-grid">
         <div class="dialog-spec"><small>Diện tích</small><strong>${item.area} m²</strong></div>
@@ -679,7 +934,7 @@ function openPropertyDialog(propertyId) {
       </div>
 
       <div>
-        <h2>Điểm nhấn kiến trúc &amp; đặc quyền</h2>
+        <h2>Điểm nhấn nổi bật</h2>
         <ul class="dialog-highlights">
           ${item.highlights.map((h) => `<li>${escapeHtml(h)}</li>`).join('')}
         </ul>
@@ -708,6 +963,7 @@ function openPropertyDialog(propertyId) {
         <form method="dialog">
           <button type="submit" value="cancel" class="btn btn-outline">Đóng</button>
         </form>
+        ${deleteActionHtml}
         <button type="button" class="btn btn-outline" id="dialog-share-btn">Chia sẻ</button>
         <button type="button" class="btn btn-accent" id="dialog-roi-btn">Phân tích ROI</button>
         <button type="button" class="btn btn-primary" id="dialog-book-btn" autofocus>Đặt lịch xem thực tế</button>
@@ -717,28 +973,37 @@ function openPropertyDialog(propertyId) {
 
   els.dialog.showModal();
 
+  document.getElementById('dialog-delete-btn')?.addEventListener('click', () => {
+    deleteUserListing(item.id);
+  });
+
   document.getElementById('dialog-share-btn')?.addEventListener('click', async () => {
-    const shareUrl = `${SITE_URL}?du-an=${item.id}`;
+    const shareText = `${item.title} (${Number(item.priceBillion).toFixed(1).replace('.', ',')} Tỷ) — ${item.district}, ${item.city}${
+      item.contactPhone ? ` · LH: ${item.contactPhone}` : ''
+    }`;
+    const shareUrl = item.isUserListing ? SITE_URL : `${SITE_URL}?du-an=${item.id}`;
     const statusEl = document.getElementById('share-inline-status');
+
     try {
       if (navigator.share) {
         await navigator.share({
           title: item.title,
-          text: `${item.title} (${item.priceBillion.toFixed(1).replace('.', ',')} Tỷ) — ${item.district}`,
+          text: shareText,
           url: shareUrl,
         });
-        if (statusEl) statusEl.textContent = 'Đã chia sẻ liên kết bất động sản.';
+        if (statusEl) statusEl.textContent = 'Đã chia sẻ thông tin bất động sản.';
         return;
       }
     } catch (err) {
       if (err?.name === 'AbortError') return;
     }
 
+    const clipboardPayload = item.isUserListing ? shareText : shareUrl;
     try {
-      await navigator.clipboard.writeText(shareUrl);
-      if (statusEl) statusEl.textContent = `Đã sao chép liên kết: ${shareUrl}`;
+      await navigator.clipboard.writeText(clipboardPayload);
+      if (statusEl) statusEl.textContent = `Đã sao chép: ${clipboardPayload}`;
     } catch {
-      if (statusEl) statusEl.textContent = `Liên kết trực tiếp: ${shareUrl}`;
+      if (statusEl) statusEl.textContent = `Thông tin chia sẻ: ${clipboardPayload}`;
     }
   });
 
@@ -834,7 +1099,17 @@ function updateRoiCalculator() {
   document.getElementById('roi-bar-growth').style.inlineSize = `${(100 - rentSharePct).toFixed(1)}%`;
 }
 
-/* ---------- Consultation Form Validation ---------- */
+/* ---------- Consultation & Post Form Validation ---------- */
+let sharedAnnouncer = null;
+function getErrorAnnouncer() {
+  if (sharedAnnouncer) return sharedAnnouncer;
+  sharedAnnouncer = document.createElement('div');
+  sharedAnnouncer.setAttribute('aria-live', 'polite');
+  sharedAnnouncer.classList.add('visually-hidden');
+  document.body.append(sharedAnnouncer);
+  return sharedAnnouncer;
+}
+
 function setupFormValidation(form) {
   if (!form) return;
 
@@ -849,10 +1124,7 @@ function setupFormValidation(form) {
     else el.removeAttribute('aria-describedby');
   };
 
-  const announcer = document.createElement('div');
-  announcer.setAttribute('aria-live', 'polite');
-  announcer.classList.add('visually-hidden');
-  document.body.append(announcer);
+  const announcer = getErrorAnnouncer();
   let announceTimer;
   let announcedField;
 
@@ -982,12 +1254,16 @@ function setupFormValidation(form) {
     },
     true,
   );
+}
+
+function setupConsultationSubmit() {
+  const form = els.consultationForm;
+  if (!form) return;
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     if (!form.checkValidity()) {
-      const firstInvalid = form.querySelector(':invalid');
-      firstInvalid?.focus();
+      form.querySelector(':invalid')?.focus();
       return;
     }
 
@@ -997,7 +1273,7 @@ function setupFormValidation(form) {
     const property = data.get('property');
     const visitDate = data.get('visitDate');
 
-    els.formSuccessDetails.textContent = `Cảm ơn ${name}. Chuyên viên AnGia Premier sẽ liên hệ qua số ${phone} để xác nhận lịch tư vấn "${property}"${visitDate ? ` vào ngày ${visitDate}` : ''}.`;
+    els.formSuccessDetails.textContent = `Cảm ơn ${name}. Chuyên viên AnGia Nhà Đất sẽ liên hệ qua số ${phone} để xác nhận lịch xem "${property}"${visitDate ? ` vào ngày ${visitDate}` : ''}.`;
     form.hidden = true;
     els.formSuccess.hidden = false;
   });
@@ -1018,10 +1294,34 @@ function bindEvents() {
     state.type = els.searchType.value;
     state.budget = els.searchBudget.value;
     state.onlySaved = false;
+    state.onlyMyPosts = false;
     els.toggleSavedBtn.setAttribute('aria-pressed', 'false');
+    els.toggleMyPostsBtn?.setAttribute('aria-pressed', 'false');
     syncFilterPills();
     renderProperties();
     document.getElementById('listings')?.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  document.querySelectorAll('.quick-tag:not([data-open-post])').forEach((tag) => {
+    tag.addEventListener('click', () => {
+      state.keyword = '';
+      state.city = tag.dataset.quickCity || 'all';
+      state.type = tag.dataset.quickType || 'all';
+      state.budget = tag.dataset.quickBudget || 'all';
+      state.onlySaved = false;
+      state.onlyMyPosts = false;
+
+      els.searchKeyword.value = '';
+      els.searchCity.value = state.city;
+      els.searchType.value = state.type;
+      els.searchBudget.value = state.budget;
+      els.toggleSavedBtn.setAttribute('aria-pressed', 'false');
+      els.toggleMyPostsBtn?.setAttribute('aria-pressed', 'false');
+
+      syncFilterPills();
+      renderProperties();
+      document.getElementById('listings')?.scrollIntoView({ behavior: 'smooth' });
+    });
   });
 
   els.filterPills.forEach((pill) => {
@@ -1029,10 +1329,21 @@ function bindEvents() {
       state.type = pill.dataset.filterType;
       els.searchType.value = state.type;
       state.onlySaved = false;
+      state.onlyMyPosts = false;
       els.toggleSavedBtn.setAttribute('aria-pressed', 'false');
+      els.toggleMyPostsBtn?.setAttribute('aria-pressed', 'false');
       syncFilterPills();
       renderProperties();
     });
+  });
+
+  els.toggleMyPostsBtn?.addEventListener('click', () => {
+    state.onlyMyPosts = !state.onlyMyPosts;
+    state.onlySaved = false;
+    els.toggleSavedBtn.setAttribute('aria-pressed', 'false');
+    els.toggleMyPostsBtn.setAttribute('aria-pressed', state.onlyMyPosts ? 'true' : 'false');
+    syncFilterPills();
+    renderProperties();
   });
 
   els.sortSelect.addEventListener('change', () => {
@@ -1042,7 +1353,10 @@ function bindEvents() {
 
   els.toggleSavedBtn.addEventListener('click', () => {
     state.onlySaved = !state.onlySaved;
+    state.onlyMyPosts = false;
     els.toggleSavedBtn.setAttribute('aria-pressed', state.onlySaved ? 'true' : 'false');
+    els.toggleMyPostsBtn?.setAttribute('aria-pressed', 'false');
+    syncFilterPills();
     renderProperties();
     document.getElementById('listings')?.scrollIntoView({ behavior: 'smooth' });
   });
@@ -1051,7 +1365,7 @@ function bindEvents() {
     const saveBtn = e.target.closest('[data-save-id]');
     if (saveBtn) {
       const id = saveBtn.dataset.saveId;
-      const item = PROPERTIES.find((p) => p.id === id);
+      const item = getAllProperties().find((p) => p.id === id);
       if (state.savedIds.has(id)) {
         state.savedIds.delete(id);
         if (item) showToast(`Đã bỏ lưu "${item.title}".`);
@@ -1068,6 +1382,12 @@ function bindEvents() {
     const compareBtn = e.target.closest('[data-compare-id]');
     if (compareBtn) {
       toggleCompareProperty(compareBtn.dataset.compareId);
+      return;
+    }
+
+    const deleteBtn = e.target.closest('[data-delete-id]');
+    if (deleteBtn) {
+      deleteUserListing(deleteBtn.dataset.deleteId);
       return;
     }
 
@@ -1098,8 +1418,11 @@ function bindEvents() {
     if (!card) return;
     state.city = card.dataset.cityPick;
     state.onlySaved = false;
+    state.onlyMyPosts = false;
     els.searchCity.value = state.city;
     els.toggleSavedBtn.setAttribute('aria-pressed', 'false');
+    els.toggleMyPostsBtn?.setAttribute('aria-pressed', 'false');
+    syncFilterPills();
     renderProperties();
     document.getElementById('listings')?.scrollIntoView({ behavior: 'smooth' });
   });
@@ -1114,13 +1437,6 @@ function bindEvents() {
 }
 
 function init() {
-  PROPERTIES.forEach((item) => {
-    const option = document.createElement('option');
-    option.value = item.title;
-    option.textContent = `${item.title} (${item.priceBillion.toFixed(1).replace('.', ',')} Tỷ)`;
-    els.leadPropertySelect.append(option);
-  });
-
   const dateInput = document.getElementById('lead-date');
   if (dateInput) {
     const today = new Date().toISOString().split('T')[0];
@@ -1130,13 +1446,17 @@ function init() {
   setupAdaptiveNavbar();
   setupModalDialog(els.dialog, () => syncProjectUrlParam(null));
   setupModalDialog(els.compareDialog);
+  setupPostListing();
   activateFinancialTab = setupCalculatorTabs();
   setupFaqAccordion();
   setupFormValidation(els.consultationForm);
+  setupConsultationSubmit();
   updateSavedCounter();
+  updateMyPostsCounter();
+  syncLeadPropertyOptions();
   ensureNeighborhoodsRendered();
 
-  if (els.propertyGrid.children.length === 0) {
+  if (els.propertyGrid.children.length === 0 || state.userListings.length > 0) {
     renderProperties();
   } else if (state.savedIds.size > 0 || state.compareIds.length > 0) {
     syncCardButtonsInPlace();
@@ -1148,7 +1468,7 @@ function init() {
   bindEvents();
 
   const deepLinkId = new URLSearchParams(window.location.search).get('du-an');
-  if (deepLinkId && PROPERTIES.some((p) => p.id === deepLinkId)) {
+  if (deepLinkId && getAllProperties().some((p) => p.id === deepLinkId)) {
     openPropertyDialog(deepLinkId);
   }
 }

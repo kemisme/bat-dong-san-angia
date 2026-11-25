@@ -240,7 +240,7 @@ export const NEIGHBORHOODS = [
 export const FAQS = [
   {
     id: 'faq-legal',
-    question: 'Pháp lý các dự án tại AnGia Premier được kiểm tra như thế nào trước khi giao dịch?',
+    question: 'Pháp lý các dự án tại AnGia Nhà Đất được kiểm tra như thế nào trước khi giao dịch?',
     answer:
       'Mọi bất động sản trong danh mục phân phối đều được đội ngũ pháp chế thẩm định đầy đủ hồ sơ trước khi giới thiệu: giấy chứng nhận quyền sử dụng đất (sổ hồng/sổ đỏ), quy hoạch 1/500, giấy phép xây dựng, văn bản nghiệm thu hoàn công và xác nhận không tranh chấp thế chấp.',
   },
@@ -248,7 +248,7 @@ export const FAQS = [
     id: 'faq-loan',
     question: 'Khách hàng được hỗ trợ vay ngân hàng tối đa bao nhiêu phần trăm giá trị căn nhà?',
     answer:
-      'Đối với các bất động sản đã có sổ hồng hoặc dự án có ngân hàng bảo lãnh, khách hàng có thể vay tối đa 65% đến 70% giá trị tài sản với thời hạn lên đến 35 năm. AnGia Premier liên kết trực tiếp các ngân hàng lớn để áp dụng gói ân hạn gốc và lãi suất ưu đãi 12–24 tháng đầu.',
+      'Đối với các bất động sản đã có sổ hồng hoặc dự án có ngân hàng bảo lãnh, khách hàng có thể vay tối đa 65% đến 70% giá trị tài sản với thời hạn lên đến 35 năm. AnGia Nhà Đất liên kết trực tiếp các ngân hàng lớn để áp dụng gói ân hạn gốc và lãi suất ưu đãi 12–24 tháng đầu.',
   },
   {
     id: 'faq-fees',
@@ -264,11 +264,26 @@ export const FAQS = [
   },
   {
     id: 'faq-foreign',
-    question: 'Việt kiều và người nước ngoài có thể sở hữu bất động sản tại AnGia Premier không?',
+    question: 'Việt kiều và người nước ngoài có thể sở hữu bất động sản tại Việt Nam không?',
     answer:
       'Có. Theo Luật Nhà ở và Luật Đất đai hiện hành, người Việt Nam định cư ở nước ngoài (còn quốc tịch Việt Nam hoặc gốc Việt) và cá nhân nước ngoài nhập cảnh hợp pháp được phép mua, sở hữu nhà ở thương mại nằm ngoài khu vực quốc phòng an ninh trong hạn mức quy định của từng dự án.',
   },
 ];
+
+export function defaultSlugForType(type) {
+  switch (type) {
+    case 'Căn hộ':
+      return 'waterfront-tower';
+    case 'Biệt thự':
+      return 'garden-villa';
+    case 'Penthouse':
+      return 'penthouse-interior';
+    case 'Nhà phố':
+    case 'Đất nền':
+    default:
+      return 'townhouse-facade';
+  }
+}
 
 export function escapeHtml(value) {
   return String(value)
@@ -303,21 +318,30 @@ export function renderPictureHtml({
 
 export function renderPropertyCardHtml(item, { base = './', isSaved = false, isCompared = false } = {}) {
   const safeTitle = escapeHtml(item.title);
+  const mediaHtml = item.customImage
+    ? `<img src="${escapeHtml(item.customImage)}" alt="${safeTitle} tại ${escapeHtml(item.district)}" width="640" height="400" loading="lazy" decoding="async" />`
+    : renderPictureHtml({
+        slug: item.imageSlug || defaultSlugForType(item.type),
+        alt: `${item.title} tại ${item.district}`,
+        width: 640,
+        height: 400,
+        sizes: '(max-width: 720px) 100vw, (max-width: 1120px) 50vw, 390px',
+        base,
+        loading: 'lazy',
+      });
+
+  const statusBadgeClass = item.isUserListing ? 'badge badge-user' : 'badge badge-accent';
+  const deleteBtnHtml = item.isUserListing
+    ? `<button type="button" class="btn btn-danger-outline btn-sm" data-delete-id="${item.id}" aria-label="Xóa tin ${safeTitle}">Xóa tin</button>`
+    : '';
+
   return `
     <article class="property-card-wrap" data-property-id="${item.id}">
       <div class="card-media">
-        ${renderPictureHtml({
-          slug: item.imageSlug,
-          alt: `${item.title} tại ${item.district}`,
-          width: 640,
-          height: 400,
-          sizes: '(max-width: 720px) 100vw, (max-width: 1120px) 50vw, 390px',
-          base,
-          loading: 'lazy',
-        })}
+        ${mediaHtml}
         <div class="card-badges">
           <span class="badge">${escapeHtml(item.type)}</span>
-          <span class="badge badge-accent">${escapeHtml(item.status)}</span>
+          <span class="${statusBadgeClass}">${escapeHtml(item.status)}</span>
         </div>
         <button
           type="button"
@@ -341,18 +365,19 @@ export function renderPropertyCardHtml(item, { base = './', isSaved = false, isC
         <p class="card-summary">${escapeHtml(item.summary)}</p>
         <ul class="card-specs">
           <li>${item.area} m²</li>
-          <li>${item.bedrooms} Phòng ngủ</li>
-          <li>${item.bathrooms} Phòng tắm</li>
+          <li>${item.bedrooms} PN</li>
+          <li>${item.bathrooms} PT</li>
           <li>${escapeHtml(item.handover)}</li>
         </ul>
       </div>
 
       <footer class="card-footer">
         <div class="card-price">
-          <strong>${item.priceBillion.toFixed(1).replace('.', ',')} Tỷ</strong>
+          <strong>${Number(item.priceBillion).toFixed(1).replace('.', ',')} Tỷ</strong>
           <span>${escapeHtml(item.pricePerSqm)}</span>
         </div>
         <div class="card-actions">
+          ${deleteBtnHtml}
           <button
             type="button"
             class="btn btn-outline btn-sm compare-toggle-btn"
@@ -419,12 +444,12 @@ export function buildJsonLd(siteUrl = SITE_URL) {
       {
         '@type': 'RealEstateAgent',
         '@id': `${siteUrl}#organization`,
-        name: 'AnGia Premier Realty',
+        name: 'AnGia Nhà Đất',
         url: siteUrl,
         logo: `${siteUrl}favicon.svg`,
         image: `${siteUrl}images/hero-villa-1200.jpg`,
         description:
-          'Sàn giao dịch & tư vấn bất động sản hạng sang tại TP.HCM, Hà Nội, Đà Nẵng. Biệt thự ven sông, Penthouse, Nhà phố pháp lý minh bạch.',
+          'Cổng tìm kiếm, mua bán và đăng tin bất động sản thân thiện tại TP.HCM, Hà Nội, Đà Nẵng với pháp lý minh bạch.',
         telephone: '+84-1900-6868',
         areaServed: ['TP. Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng'],
         address: {
@@ -439,14 +464,14 @@ export function buildJsonLd(siteUrl = SITE_URL) {
         '@type': 'WebSite',
         '@id': `${siteUrl}#website`,
         url: siteUrl,
-        name: 'AnGia Premier — Bất Động Sản Hạng Sang & Đầu Tư Đô Thị',
+        name: 'AnGia Nhà Đất — Mua Bán & Đăng Tin Bất Động Sản',
         inLanguage: 'vi-VN',
         publisher: { '@id': `${siteUrl}#organization` },
       },
       {
         '@type': 'ItemList',
         '@id': `${siteUrl}#listings`,
-        name: 'Danh mục bất động sản nổi bật AnGia Premier',
+        name: 'Danh mục bất động sản nổi bật AnGia Nhà Đất',
         numberOfItems: PROPERTIES.length,
         itemListElement: PROPERTIES.map((item, idx) => ({
           '@type': 'ListItem',
