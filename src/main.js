@@ -2,7 +2,6 @@ import './styles/main.css';
 import {
   COMING_SOON,
   PROPERTIES,
-  NEIGHBORHOODS,
   SITE_URL,
   defaultSlugForType,
   escapeHtml,
@@ -10,7 +9,6 @@ import {
   renderComingSoonCardHtml,
   renderPictureHtml,
   renderPropertyCardHtml,
-  renderNeighborhoodCardHtml,
 } from './data/properties.js';
 
 if (!Object.hasOwn(HTMLElement.prototype, 'popover')) {
@@ -46,7 +44,6 @@ const els = {
   siteMenu: document.getElementById('site-menu'),
   propertyGrid: document.getElementById('property-grid'),
   comingSoonGrid: document.getElementById('coming-soon-grid'),
-  neighborhoodGrid: document.getElementById('neighborhood-grid'),
   resultsSummary: document.getElementById('results-summary'),
   savedCount: document.getElementById('saved-count'),
   toggleSavedBtn: document.getElementById('toggle-saved-btn'),
@@ -338,13 +335,6 @@ function syncFilterPills() {
   els.filterPills.forEach((pill) => {
     pill.classList.toggle('is-active', pill.dataset.filterType === state.type);
   });
-}
-
-function ensureNeighborhoodsRendered() {
-  if (els.neighborhoodGrid.children.length > 0) return;
-  els.neighborhoodGrid.innerHTML = NEIGHBORHOODS.map((area) =>
-    renderNeighborhoodCardHtml(area, { base }),
-  ).join('');
 }
 
 function ensureComingSoonRendered() {
@@ -1214,18 +1204,6 @@ function bindEvents() {
     showToast(`Đã chọn "${label}" — để lại SĐT để nhận báo giá hời sớm nhất.`);
   });
 
-  els.neighborhoodGrid.addEventListener('click', (e) => {
-    const card = e.target.closest('[data-city-pick]');
-    if (!card) return;
-    state.city = card.dataset.cityPick;
-    state.onlySaved = false;
-    els.searchCity.value = state.city;
-    els.toggleSavedBtn.setAttribute('aria-pressed', 'false');
-    syncFilterPills();
-    renderProperties();
-    document.getElementById('listings')?.scrollIntoView({ behavior: 'smooth' });
-  });
-
   ['calc-price', 'calc-down', 'calc-rate', 'calc-years'].forEach((id) => {
     document.getElementById(id)?.addEventListener('input', updateMortgageCalculator);
   });
@@ -1265,7 +1243,6 @@ function init() {
   setupFormValidation(els.consultationForm);
   updateSavedCounter();
   ensureComingSoonRendered();
-  ensureNeighborhoodsRendered();
 
   if (els.propertyGrid.children.length === 0) {
     renderProperties();
