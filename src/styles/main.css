@@ -382,21 +382,21 @@ textarea {
   }
 
   .header-inner {
-    gap: 0.35rem;
+    gap: 0.25rem;
   }
 
   .site-logo {
-    gap: 0.4rem;
+    gap: 0.35rem;
   }
 
   .logo-mark {
-    inline-size: 1.9rem;
-    block-size: 1.9rem;
-    border-radius: 8px;
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    border-radius: 7px;
   }
 
   .logo-text strong {
-    font-size: 0.88rem;
+    font-size: 0.82rem;
   }
 
   .logo-text small,
@@ -405,7 +405,7 @@ textarea {
   }
 
   .header-actions {
-    gap: 0.35rem;
+    gap: 0.25rem;
   }
 
   .menu-button span {
@@ -420,8 +420,9 @@ textarea {
   .menu-button,
   .saved-pill,
   .post-cta-btn {
-    padding: 0.38rem 0.52rem;
-    font-size: 0.8rem;
+    min-block-size: 34px;
+    padding: 0.32rem 0.45rem;
+    font-size: 0.78rem;
   }
 }
 
