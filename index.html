@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="AnGia Premier — Sàn giao dịch & tư vấn bất động sản hạng sang tại TP.HCM, Hà Nội, Đà Nẵng. Biệt thự ven sông, Penthouse, Nhà phố pháp lý minh bạch."
+    />
+    <title>AnGia Premier — Bất Động Sản Hạng Sang &amp; Đầu Tư Đô Thị</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Chuyển tới nội dung chính</a>
+
+    <header class="site-header" id="site-header">
+      <div class="header-inner container">
+        <a class="site-logo" href="#top" aria-label="AnGia Premier Trang chủ">
+          <span class="logo-mark" aria-hidden="true">A</span>
+          <span class="logo-text">
+            <strong>AnGia Premier</strong>
+            <small>Luxury Real Estate</small>
+          </span>
+        </a>
+
+        <nav class="site-nav" aria-label="Điều hướng chính">
+          <button
+            class="menu-button"
+            type="button"
+            popovertarget="site-menu"
+            popovertargetaction="toggle"
+            aria-controls="site-menu"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+            <span>Menu</span>
+          </button>
+
+          <ul id="site-menu" class="site-menu" popover="auto">
+            <li><a href="#top" aria-current="page">Trang chủ</a></li>
+            <li><a href="#listings">Dự án nổi bật</a></li>
+            <li><a href="#neighborhoods">Khu vực</a></li>
+            <li><a href="#calculator">Tính khoản vay</a></li>
+            <li><a href="#consultation">Đặt lịch tư vấn</a></li>
+          </ul>
+        </nav>
+
+        <div class="header-actions">
+          <button type="button" class="saved-pill" id="toggle-saved-btn" aria-pressed="false">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+            </svg>
+            <span><span class="saved-label">Đã lưu </span>(<span id="saved-count">0</span>)</span>
+          </button>
+          <a href="#consultation" class="btn btn-primary btn-sm">Tư vấn riêng</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero" id="top" aria-labelledby="hero-heading">
+        <img
+          class="hero-media"
+          src="./images/hero-villa.jpg"
+          alt="Biệt thự ven sông hiện đại với hồ bơi tràn viền lúc hoàng hôn"
+          width="1600"
+          height="900"
+          fetchpriority="high"
+        />
+        <div class="hero-scrim" aria-hidden="true"></div>
+
+        <div class="hero-content container">
+          <div class="hero-copy">
+            <p class="eyebrow">Danh mục bất động sản tinh tuyển 2026</p>
+            <h1 id="hero-heading">Kiến Tạo Không Gian Sống Giá Trị Bền Vững</h1>
+            <p class="hero-lead">
+              Tuyển chọn những bất động sản ven sông, penthouse tầm nhìn triệu đô và biệt thự vườn pháp lý minh bạch tại TP.HCM, Hà Nội và Đà Nẵng.
+            </p>
+          </div>
+
+          <form class="hero-search" id="hero-search-form" aria-label="Tìm kiếm nhanh bất động sản">
+            <div class="search-field">
+              <label for="search-keyword">Từ khóa hoặc dự án</label>
+              <input
+                type="search"
+                id="search-keyword"
+                name="keyword"
+                placeholder="VD: Thảo Điền, Thủ Thiêm, hồ bơi..."
+              />
+            </div>
+
+            <div class="search-field">
+              <label for="search-city">Khu vực</label>
+              <select id="search-city" name="city">
+                <option value="all">Tất cả thành phố</option>
+                <option value="TP.HCM">TP. Hồ Chí Minh</option>
+                <option value="Hà Nội">Hà Nội</option>
+                <option value="Đà Nẵng">Đà Nẵng</option>
+              </select>
+            </div>
+
+            <div class="search-field">
+              <label for="search-type">Loại hình</label>
+              <select id="search-type" name="type">
+                <option value="all">Tất cả loại hình</option>
+                <option value="Biệt thự">Biệt thự</option>
+                <option value="Penthouse">Penthouse / Duplex</option>
+                <option value="Nhà phố">Nhà phố thương mại</option>
+                <option value="Căn hộ">Căn hộ cao cấp</option>
+              </select>
+            </div>
+
+            <div class="search-field">
+              <label for="search-budget">Mức giá tối đa</label>
+              <select id="search-budget" name="budget">
+                <option value="all">Mọi mức giá</option>
+                <option value="20">Dưới 20 Tỷ</option>
+                <option value="40">Dưới 40 Tỷ</option>
+                <option value="70">Dưới 70 Tỷ</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-accent search-submit">Tìm kiếm ngay</button>
+          </form>
+
+          <dl class="hero-stats" aria-label="Thành tựu nổi bật">
+            <div class="stat-item">
+              <dt>Dự án độc quyền</dt>
+              <dd>120+</dd>
+            </div>
+            <div class="stat-item">
+              <dt>Giao dịch thành công</dt>
+              <dd>4.800+</dd>
+            </div>
+            <div class="stat-item">
+              <dt>Pháp lý minh bạch</dt>
+              <dd>100%</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="section listings-section" id="listings" aria-labelledby="listings-heading">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">Bộ sưu tập chọn lọc</p>
+              <h2 id="listings-heading">Bất Động Sản Nổi Bật</h2>
+            </div>
+            <div class="listings-controls">
+              <div class="filter-pills" role="group" aria-label="Lọc nhanh theo loại hình">
+                <button type="button" class="pill is-active" data-filter-type="all">Tất cả</button>
+                <button type="button" class="pill" data-filter-type="Biệt thự">Biệt thự</button>
+                <button type="button" class="pill" data-filter-type="Penthouse">Penthouse</button>
+                <button type="button" class="pill" data-filter-type="Nhà phố">Nhà phố</button>
+                <button type="button" class="pill" data-filter-type="Căn hộ">Căn hộ</button>
+              </div>
+              <div class="sort-control">
+                <label for="sort-select" class="visually-hidden">Sắp xếp theo</label>
+                <select id="sort-select" aria-label="Sắp xếp danh sách bất động sản">
+                  <option value="featured">Sắp xếp: Đề xuất</option>
+                  <option value="price-asc">Giá: Thấp đến cao</option>
+                  <option value="price-desc">Giá: Cao đến thấp</option>
+                  <option value="area-desc">Diện tích: Lớn nhất</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <p class="results-summary" id="results-summary" aria-live="polite">
+            Đang hiển thị 6 bất động sản phù hợp
+          </p>
+
+          <div class="property-grid" id="property-grid"></div>
+        </div>
+      </section>
+
+      <section class="section neighborhoods-section" id="neighborhoods" aria-labelledby="neighborhoods-heading">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">Bản đồ thị trường trọng điểm</p>
+              <h2 id="neighborhoods-heading">Khu Vực Đáng Sống &amp; Sinh Lời Cao</h2>
+            </div>
+            <p class="section-subtitle">
+              Chọn khu vực để lọc nhanh các bất động sản hiện có tại thị trường đó.
+            </p>
+          </div>
+
+          <div class="neighborhood-grid" id="neighborhood-grid"></div>
+        </div>
+      </section>
+
+      <section class="section calculator-section" id="calculator" aria-labelledby="calculator-heading">
+        <div class="container calculator-layout">
+          <div class="calculator-intro">
+            <p class="section-kicker">Hoạch định tài chính thông minh</p>
+            <h2 id="calculator-heading">Ước Tính Khoản Vay Mua Nhà</h2>
+            <p>
+              Tính nhanh số tiền thanh toán hàng tháng theo phương pháp dư nợ giảm dần hoặc trả đều để chủ động dòng tiền đầu tư.
+            </p>
+
+            <div class="calc-sliders">
+              <div class="range-group">
+                <div class="range-header">
+                  <label for="calc-price">Giá trị bất động sản</label>
+                  <output id="calc-price-out" for="calc-price">25,0 Tỷ VNĐ</output>
+                </div>
+                <input type="range" id="calc-price" min="3" max="100" step="0.5" value="25" />
+              </div>
+
+              <div class="range-group">
+                <div class="range-header">
+                  <label for="calc-down">Vốn tự có trả trước</label>
+                  <output id="calc-down-out" for="calc-down">30% (7,5 Tỷ)</output>
+                </div>
+                <input type="range" id="calc-down" min="15" max="80" step="5" value="30" />
+              </div>
+
+              <div class="range-group">
+                <div class="range-header">
+                  <label for="calc-rate">Lãi suất ngân hàng dự kiến</label>
+                  <output id="calc-rate-out" for="calc-rate">7,5%/năm</output>
+                </div>
+                <input type="range" id="calc-rate" min="4.5" max="13" step="0.25" value="7.5" />
+              </div>
+
+              <div class="range-group">
+                <div class="range-header">
+                  <label for="calc-years">Thời hạn vay</label>
+                  <output id="calc-years-out" for="calc-years">20 năm</output>
+                </div>
+                <input type="range" id="calc-years" min="5" max="35" step="1" value="20" />
+              </div>
+            </div>
+          </div>
+
+          <div class="calculator-card" aria-live="polite">
+            <p class="calc-card-label">Số tiền dự kiến trả hàng tháng</p>
+            <p class="calc-monthly" id="calc-monthly">141,0 Triệu/tháng</p>
+
+            <div class="calc-bar" aria-hidden="true">
+              <span class="calc-bar-principal" id="calc-bar-principal"></span>
+              <span class="calc-bar-interest" id="calc-bar-interest"></span>
+            </div>
+
+            <dl class="calc-breakdown">
+              <div>
+                <dt>Số tiền cần vay (70%)</dt>
+                <dd id="calc-loan-amount">17,50 Tỷ VNĐ</dd>
+              </div>
+              <div>
+                <dt>Tổng lãi dự kiến</dt>
+                <dd id="calc-total-interest">16,34 Tỷ VNĐ</dd>
+              </div>
+              <div>
+                <dt>Tổng gốc + lãi cuối kỳ</dt>
+                <dd id="calc-total-payment">33,84 Tỷ VNĐ</dd>
+              </div>
+            </dl>
+
+            <a href="#consultation" class="btn btn-primary btn-full">Nhận bảng tính chi tiết từ chuyên viên</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section consultation-section" id="consultation" aria-labelledby="consultation-heading">
+        <div class="container consultation-layout">
+          <div class="consultation-info">
+            <p class="section-kicker">Dịch vụ tư vấn 1:1</p>
+            <h2 id="consultation-heading">Đặt Lịch Tham Quan Thực Tế</h2>
+            <p>
+              Đội ngũ chuyên gia pháp lý &amp; cố vấn đầu tư của AnGia Premier sẽ chuẩn bị hồ sơ dự án, phân tích tỷ suất lợi nhuận và sắp xếp xe đưa đón tham quan nhà mẫu theo lịch riêng của bạn.
+            </p>
+            <ul class="trust-list">
+              <li>
+                <strong>Cam kết bảo mật thông tin</strong>
+                <span>Không spam cuộc gọi, chỉ liên hệ đúng khung giờ bạn chọn.</span>
+              </li>
+              <li>
+                <strong>Kiểm tra quy hoạch &amp; sổ hồng</strong>
+                <span>Cung cấp bản sao pháp lý dự án minh bạch trước khi đặt cọc.</span>
+              </li>
+              <li>
+                <strong>Hotline trực tiếp:</strong>
+                <span>1900 6868 (08:00 – 20:00 mỗi ngày)</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="consultation-form-wrap">
+            <form id="consultation-form" class="consultation-form" novalidate>
+              <div class="field">
+                <label for="lead-name">Họ và tên <span aria-hidden="true">*</span></label>
+                <span id="lead-name-hint" class="field-hint">Nhập họ tên đầy đủ của bạn (ít nhất 2 ký tự)</span>
+                <input
+                  type="text"
+                  id="lead-name"
+                  name="name"
+                  required
+                  minlength="2"
+                  autocomplete="name"
+                  aria-describedby="lead-name-hint"
+                  data-error="lead-name-error"
+                  placeholder="Nguyễn Minh Anh"
+                />
+                <div id="lead-name-error" class="error-msg">
+                  <span role="img" aria-label="Lỗi">❌</span> Vui lòng nhập họ và tên từ 2 ký tự trở lên.
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="lead-phone">Số điện thoại <span aria-hidden="true">*</span></label>
+                  <span id="lead-phone-hint" class="field-hint">Định dạng 10 số Việt Nam (VD: 0901234567)</span>
+                  <input
+                    type="tel"
+                    id="lead-phone"
+                    name="phone"
+                    required
+                    pattern="0[35789][0-9]{8}"
+                    autocomplete="tel"
+                    aria-describedby="lead-phone-hint"
+                    data-error="lead-phone-error"
+                    placeholder="0901234567"
+                  />
+                  <div id="lead-phone-error" class="error-msg">
+                    <span role="img" aria-label="Lỗi">❌</span> Nhập số điện thoại di động 10 chữ số hợp lệ (bắt đầu bằng 03, 05, 07, 08 hoặc 09).
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="lead-email">Email nhận tài liệu <span aria-hidden="true">*</span></label>
+                  <span id="lead-email-hint" class="field-hint">Định dạng: tenban@example.com</span>
+                  <input
+                    type="email"
+                    id="lead-email"
+                    name="email"
+                    required
+                    autocomplete="email"
+                    aria-describedby="lead-email-hint"
+                    data-error="lead-email-error"
+                    placeholder="minhanh@example.com"
+                  />
+                  <div id="lead-email-error" class="error-msg">
+                    <span role="img" aria-label="Lỗi">❌</span> Vui lòng nhập đúng định dạng email (VD: tenban@example.com).
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="lead-property">Sản phẩm quan tâm</label>
+                  <span id="lead-property-hint" class="field-hint">Chọn bất động sản hoặc để trống nếu cần tư vấn chung</span>
+                  <select id="lead-property" name="property" aria-describedby="lead-property-hint">
+                    <option value="Tư vấn danh mục phù hợp">Tư vấn danh mục phù hợp</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="lead-date">Ngày dự kiến tham quan</label>
+                  <span id="lead-date-hint" class="field-hint">Chọn ngày thuận tiện để chuyên viên đón tiếp</span>
+                  <input
+                    type="date"
+                    id="lead-date"
+                    name="visitDate"
+                    aria-describedby="lead-date-hint"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="lead-note">Nhu cầu bổ sung</label>
+                <span id="lead-note-hint" class="field-hint">VD: Hướng nhà hợp phong thủy, nhu cầu vay ngân hàng...</span>
+                <textarea
+                  id="lead-note"
+                  name="note"
+                  rows="3"
+                  aria-describedby="lead-note-hint"
+                  placeholder="Tôi muốn xem thực tế vào cuối tuần và nhận bảng giá chi tiết..."
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-full">Gửi yêu cầu đặt lịch</button>
+            </form>
+
+            <div class="form-success" id="form-success" hidden>
+              <h3>Đã tiếp nhận yêu cầu tư vấn</h3>
+              <p id="form-success-details"></p>
+              <button type="button" class="btn btn-outline" id="reset-form-btn">Gửi yêu cầu khác</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <a class="site-logo footer-logo" href="#top">
+            <span class="logo-mark" aria-hidden="true">A</span>
+            <span class="logo-text">
+              <strong>AnGia Premier</strong>
+              <small>Luxury Real Estate</small>
+            </span>
+          </a>
+          <p class="footer-desc">
+            Đối tác phân phối bất động sản hạng sang hàng đầu, đồng hành cùng khách hàng từ khâu thẩm định pháp lý đến tối ưu hóa giá trị tài sản.
+          </p>
+        </div>
+
+        <div>
+          <h3>Văn phòng giao dịch</h3>
+          <ul class="footer-list">
+            <li>TP.HCM: 88 Song Hành, Thảo Điền, TP. Thủ Đức</li>
+            <li>Hà Nội: 25 Xuân Diệu, Quảng An, Tây Hồ</li>
+            <li>Đà Nẵng: 112 Võ Nguyên Giáp, Sơn Trà</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Liên kết nhanh</h3>
+          <ul class="footer-list">
+            <li><a href="#listings">Danh mục bất động sản</a></li>
+            <li><a href="#neighborhoods">Khu vực trọng điểm</a></li>
+            <li><a href="#calculator">Công cụ tính khoản vay</a></li>
+            <li><a href="#consultation">Đặt lịch tham quan</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <p>© 2026 AnGia Premier Realty. Toàn bộ thông tin dự án mang tính giới thiệu danh mục.</p>
+      </div>
+    </footer>
+
+    <dialog id="property-dialog" class="property-dialog" closedby="any" aria-labelledby="dialog-title">
+      <div class="dialog-shell" id="dialog-content"></div>
+    </dialog>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
