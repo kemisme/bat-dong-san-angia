@@ -1064,26 +1064,98 @@ function setupFormValidation(form) {
     true,
   );
 
-  form.addEventListener('submit', (e) => {
+  let isSubmitting = false;
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
     if (!form.checkValidity()) {
       form.querySelector(':invalid')?.focus();
       return;
     }
 
-    const data = new FormData(form);
-    const name = data.get('name');
-    const phone = data.get('phone');
-    const property = data.get('property');
-    const visitDate = data.get('visitDate');
+    const DISCORD_WEBHOOK_URL =
+      'https://discord.com/api/webhooks/1477541626317377689/N0ZDpv6M4SzilU07USvg8tA0s8EI6XN3_pZ4SQnj5Twfj9XyF6JbYAp4DqxKGoQDUZSa';
 
-    els.formSuccessDetails.textContent = `Cảm ơn ${name}. Bộ phận bán hàng AnGia Nhà Đất sẽ liên hệ qua số ${phone} để gửi bảng giá và hẹn lịch xem "${property}"${visitDate ? ` vào ngày ${visitDate}` : ''}.`;
-    form.hidden = true;
-    els.formSuccess.hidden = false;
+    const data = new FormData(form);
+    const name = String(data.get('name') || '').trim();
+    const phone = String(data.get('phone') || '').trim();
+    const email = String(data.get('email') || '').trim();
+    const property = String(data.get('property') || 'Tư vấn danh mục phù hợp').trim();
+    const visitDate = String(data.get('visitDate') || '').trim();
+    const note = String(data.get('note') || '').trim();
+
+    const submitErrorEl = document.getElementById('form-submit-error');
+    const submitBtn = document.getElementById('lead-submit-btn');
+
+    if (submitErrorEl) {
+      submitErrorEl.hidden = true;
+      submitErrorEl.textContent = '';
+    }
+
+    isSubmitting = true;
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.setAttribute('aria-busy', 'true');
+      submitBtn.textContent = 'Đang gửi yêu cầu...';
+    }
+
+    try {
+      const response = await fetch(DISCORD_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: 'AnGia Nhà Đất · Đặt Lịch',
+          embeds: [
+            {
+              title: '📩 Khách mới đặt lịch xem nhà / tư vấn',
+              color: 0x0b5ed7,
+              fields: [
+                { name: 'Họ và tên', value: name || 'Chưa nhập', inline: true },
+                { name: 'Số điện thoại', value: phone || 'Chưa nhập', inline: true },
+                { name: 'Email', value: email || 'Chưa nhập', inline: false },
+                { name: 'Sản phẩm quan tâm', value: property, inline: false },
+                { name: 'Ngày dự kiến đi xem', value: visitDate || 'Linh hoạt theo lịch', inline: true },
+                { name: 'Ghi chú thêm', value: note || 'Không có ghi chú', inline: false },
+              ],
+              footer: { text: 'AnGia Nhà Đất · Hóc Môn' },
+              timestamp: new Date().toISOString(),
+            },
+          ],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Discord webhook HTTP ${response.status}`);
+      }
+
+      els.formSuccessDetails.textContent = `Cảm ơn ${name}. Bộ phận bán hàng AnGia Nhà Đất sẽ liên hệ qua số ${phone} để gửi bảng giá và hẹn lịch xem "${property}"${visitDate ? ` vào ngày ${visitDate}` : ''}.`;
+      form.hidden = true;
+      els.formSuccess.hidden = false;
+      showToast('Đã gửi yêu cầu đặt lịch thành công!');
+    } catch {
+      if (submitErrorEl) {
+        submitErrorEl.textContent =
+          'Không thể gửi tự động lúc này. Vui lòng thử lại hoặc gọi/nhắn Zalo trực tiếp 0961 589 925.';
+        submitErrorEl.hidden = false;
+      }
+    } finally {
+      isSubmitting = false;
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.removeAttribute('aria-busy');
+        submitBtn.textContent = 'Gửi yêu cầu đặt lịch';
+      }
+    }
   });
 
   els.resetFormBtn?.addEventListener('click', () => {
     form.reset();
+    const submitErrorEl = document.getElementById('form-submit-error');
+    if (submitErrorEl) {
+      submitErrorEl.hidden = true;
+      submitErrorEl.textContent = '';
+    }
     els.formSuccess.hidden = true;
     form.hidden = false;
   });

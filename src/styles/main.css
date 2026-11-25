@@ -2340,3 +2340,20 @@ body:has(#compare-tray:not([hidden])) .floating-contact {
   }
 }
 
+.form-submit-error {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgb(185 28 28 / 0.35);
+  background-color: var(--error-bg);
+  color: var(--error);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+
