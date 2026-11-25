@@ -18,11 +18,15 @@ async function run() {
   await fs.mkdir(RAW_DIR, { recursive: true });
 
   for (const slug of SLUGS) {
-    const srcPath = path.join(SRC_DIR, `${slug}.jpg`);
     const rawBackupPath = path.join(RAW_DIR, `${slug}.jpg`);
+    const srcPath = path.join(SRC_DIR, `${slug}.jpg`);
 
-    // Back up original file into assets-raw/ before converting and removing source
-    await fs.copyFile(srcPath, rawBackupPath);
+    try {
+      await fs.access(rawBackupPath);
+    } catch {
+      await fs.copyFile(srcPath, rawBackupPath);
+      await fs.unlink(srcPath);
+    }
 
     const pipeline = sharp(rawBackupPath).rotate();
 
@@ -30,27 +34,37 @@ async function run() {
       pipeline
         .clone()
         .resize({ width: 640, withoutEnlargement: true })
-        .avif({ quality: 52, effort: 5 })
+        .avif({ quality: 45, effort: 5 })
         .toFile(path.join(SRC_DIR, `${slug}-640.avif`)),
       pipeline
         .clone()
+        .resize({ width: 800, withoutEnlargement: true })
+        .avif({ quality: 45, effort: 5 })
+        .toFile(path.join(SRC_DIR, `${slug}-800.avif`)),
+      pipeline
+        .clone()
         .resize({ width: 1200, withoutEnlargement: true })
-        .avif({ quality: 54, effort: 5 })
+        .avif({ quality: 48, effort: 5 })
         .toFile(path.join(SRC_DIR, `${slug}-1200.avif`)),
       pipeline
         .clone()
         .resize({ width: 640, withoutEnlargement: true })
-        .webp({ quality: 74 })
+        .webp({ quality: 70 })
         .toFile(path.join(SRC_DIR, `${slug}-640.webp`)),
       pipeline
         .clone()
+        .resize({ width: 800, withoutEnlargement: true })
+        .webp({ quality: 72 })
+        .toFile(path.join(SRC_DIR, `${slug}-800.webp`)),
+      pipeline
+        .clone()
         .resize({ width: 1200, withoutEnlargement: true })
-        .webp({ quality: 76 })
+        .webp({ quality: 74 })
         .toFile(path.join(SRC_DIR, `${slug}-1200.webp`)),
       pipeline
         .clone()
         .resize({ width: 800, withoutEnlargement: true })
-        .jpeg({ quality: 76, mozjpeg: true })
+        .jpeg({ quality: 74, mozjpeg: true })
         .toFile(path.join(SRC_DIR, `${slug}-800.jpg`)),
     ]);
 
@@ -58,11 +72,9 @@ async function run() {
       await pipeline
         .clone()
         .resize({ width: 1200, withoutEnlargement: true })
-        .jpeg({ quality: 80, mozjpeg: true })
+        .jpeg({ quality: 78, mozjpeg: true })
         .toFile(path.join(SRC_DIR, `${slug}-1200.jpg`));
     }
-
-    await fs.unlink(srcPath);
   }
 
   const files = (await fs.readdir(SRC_DIR)).sort();

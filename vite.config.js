@@ -12,7 +12,7 @@ import {
 
 const base = process.env.BASE_PATH || '/';
 
-function prerenderHtml() {
+function prerenderAndInlineCss() {
   return {
     name: 'prerender-real-estate-html',
     transformIndexHtml(html) {
@@ -31,12 +31,27 @@ function prerenderHtml() {
         .replace('<!--SSR_NEIGHBORHOODS-->', neighborhoodsHtml)
         .replace('<!--SSR_FAQS-->', faqsHtml);
     },
+    generateBundle(_options, bundle) {
+      const htmlAsset = bundle['index.html'];
+      if (!htmlAsset || typeof htmlAsset.source !== 'string') return;
+
+      for (const [fileName, asset] of Object.entries(bundle)) {
+        if (fileName.endsWith('.css') && asset.type === 'asset' && typeof asset.source === 'string') {
+          const escapedName = fileName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const linkRegex = new RegExp(`<link\\s+rel="stylesheet"[^>]*href="[^"]*${escapedName}"[^>]*>`, 'i');
+          if (linkRegex.test(htmlAsset.source)) {
+            htmlAsset.source = htmlAsset.source.replace(linkRegex, `<style>${asset.source}</style>`);
+            delete bundle[fileName];
+          }
+        }
+      }
+    },
   };
 }
 
 export default defineConfig({
   base,
-  plugins: [prerenderHtml()],
+  plugins: [prerenderAndInlineCss()],
   build: {
     target: 'esnext',
     outDir: 'dist',

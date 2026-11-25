@@ -241,8 +241,8 @@ export function renderPictureHtml({
   const loadingAttr = loading ? ` loading="${loading}"` : '';
 
   return `<picture>
-    <source type="image/avif" srcset="${base}images/${slug}-640.avif 640w, ${base}images/${slug}-1200.avif 1200w" sizes="${sizes}" />
-    <source type="image/webp" srcset="${base}images/${slug}-640.webp 640w, ${base}images/${slug}-1200.webp 1200w" sizes="${sizes}" />
+    <source type="image/avif" srcset="${base}images/${slug}-640.avif 640w, ${base}images/${slug}-800.avif 800w, ${base}images/${slug}-1200.avif 1200w" sizes="${sizes}" />
+    <source type="image/webp" srcset="${base}images/${slug}-640.webp 640w, ${base}images/${slug}-800.webp 800w, ${base}images/${slug}-1200.webp 1200w" sizes="${sizes}" />
     <img${classAttr} src="${base}images/${slug}-800.jpg" alt="${safeAlt}" width="${width}" height="${height}"${loadingAttr}${priorityAttr} decoding="async" />
   </picture>`;
 }

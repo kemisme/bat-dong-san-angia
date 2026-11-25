@@ -857,7 +857,7 @@ textarea {
 
 .calc-sliders {
   display: grid;
-  gap: 1.25rem;
+  gap: 1.5rem;
   margin-block-start: 1.5rem;
 }
 
@@ -880,6 +880,8 @@ textarea {
 
 .range-group input[type='range'] {
   inline-size: 100%;
+  min-block-size: 28px;
+  padding-block: 4px;
   accent-color: var(--primary);
 }
 
